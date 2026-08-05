@@ -5,9 +5,12 @@ import { logger } from "./middlewares/logger.middleware";
 import { requestId } from "./middlewares/requestId.middleware";
 import { notFound } from "./middlewares/notFound.middleware";
 import { errorHandler } from "./middlewares/error.middleware";
-
+import { corsMiddleware } from "./config/cors";
+import compression from "compression";
 const app = express();
 app.use(helmet());
+app.use(corsMiddleware);
+app.use(compression());
 app.use(requestId);
 app.use(logger);
 app.use(express.json());
