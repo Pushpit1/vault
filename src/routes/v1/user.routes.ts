@@ -1,11 +1,15 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware";
+import { authenticate } from "../../middlewares/auth.middleware";
+
 import { createUserSchema } from "../../validators/user.validator";
 import { loginSchema } from "../../validators/auth.validator";
+
 import {
   getUsers,
   createUser,
   loginUser,
+  getProfile,
 } from "../../controllers/user.controller";
 
 const router = Router();
@@ -22,6 +26,12 @@ router.post(
   "/login",
   validate(loginSchema),
   loginUser
+);
+
+router.get(
+  "/me",
+  authenticate,
+  getProfile
 );
 
 export default router;

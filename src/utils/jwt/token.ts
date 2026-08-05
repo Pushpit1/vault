@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET!;
+import { env } from "../../config/env";
 
 export function generateAccessToken(
   userId: string,
@@ -11,7 +10,7 @@ export function generateAccessToken(
       sub: userId,
       email,
     },
-    JWT_SECRET,
+    env.JWT_SECRET,
     {
       expiresIn: "15m",
     }

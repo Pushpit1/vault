@@ -36,3 +36,12 @@ export const loginUser = asyncHandler(
     });
   }
 );
+
+export const getProfile = asyncHandler(
+  async (req: Request, res: Response) => {
+    res.status(200).json({
+      success: true,
+      data: req.user,
+    });
+  }
+);
