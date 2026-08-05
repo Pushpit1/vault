@@ -1,23 +1,52 @@
 import { Prisma } from "../generated/prisma";
 import { userRepository } from "../repositories/user.repository";
-import { hashPassword } from "../utils/auth/password";
+import {
+  comparePassword,
+  hashPassword,
+} from "../utils/auth/password";
+
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
   },
 
   async createUser(data: Prisma.UserCreateInput) {
-  const existingUser = await userRepository.findByEmail(data.email);
+    const existingUser = await userRepository.findByEmail(data.email);
 
-  if (existingUser) {
-    throw new Error("Email already exists");
-  }
-const hashedPassword = await hashPassword(data.password);
+    if (existingUser) {
+      throw new Error("Email already exists");
+    }
 
-  return userRepository.create({
-  ...data,
-  password: hashedPassword,
-});
+    const hashedPassword = await hashPassword(data.password);
 
-}
+    return userRepository.create({
+      ...data,
+      password: hashedPassword,
+    });
+  },
+
+  async login(email: string, password: string) {
+    const user = await userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new Error("Invalid email or password");
+    }
+
+    const isPasswordValid = await comparePassword(
+      password,
+      user.password
+    );
+
+    if (!isPasswordValid) {
+      throw new Error("Invalid email or password");
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  },
 };
