@@ -4,7 +4,7 @@ import {
   comparePassword,
   hashPassword,
 } from "../utils/auth/password";
-
+import { generateAccessToken } from "../utils/jwt/token";
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
@@ -41,12 +41,21 @@ export const userService = {
       throw new Error("Invalid email or password");
     }
 
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+   const accessToken = generateAccessToken(
+  user.id,
+  user.email
+);
+
+return {
+  accessToken,
+
+  user: {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  },
+};
   },
 };
