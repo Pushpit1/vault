@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/error.middleware";
 import { corsMiddleware } from "./config/cors";
 import compression from "compression";
 const app = express();
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(corsMiddleware);
 app.use(compression());
