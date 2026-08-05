@@ -7,6 +7,12 @@ export const userService = {
   },
 
   async createUser(data: Prisma.UserCreateInput) {
-    return userRepository.create(data);
-  },
+  const existingUser = await userRepository.findByEmail(data.email);
+
+  if (existingUser) {
+    throw new Error("Email already exists");
+  }
+
+  return userRepository.create(data);
+}
 };
