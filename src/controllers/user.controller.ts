@@ -39,9 +39,13 @@ export const loginUser = asyncHandler(
 
 export const getProfile = asyncHandler(
   async (req: Request, res: Response) => {
+    const userId = req.user.sub;
+
+    const user = await userService.getProfile(userId);
+
     res.status(200).json({
       success: true,
-      data: req.user,
+      data: user,
     });
   }
 );

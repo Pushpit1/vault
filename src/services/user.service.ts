@@ -57,5 +57,17 @@ return {
     updatedAt: user.updatedAt,
   },
 };
+
+
   },
+
+  async getProfile(userId: string) {
+  const user = await userRepository.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+}
 };
