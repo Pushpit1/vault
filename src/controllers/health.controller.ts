@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { asyncHandler } from "../utils/asyncHandler";
 
-export const getHealth = (req: Request, res: Response) => {
+export const getHealth = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({
     status: "UP",
   });
-};
+});
