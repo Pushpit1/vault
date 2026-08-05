@@ -43,7 +43,8 @@ export const userService = {
 
    const accessToken = generateAccessToken(
   user.id,
-  user.email
+  user.email,
+  user.role
 );
 
 return {

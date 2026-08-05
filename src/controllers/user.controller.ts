@@ -49,3 +49,12 @@ export const getProfile = asyncHandler(
     });
   }
 );
+
+export const getAdminDashboard = asyncHandler(
+  async (_req: Request, res: Response) => {
+    res.status(200).json({
+      success: true,
+      message: "Welcome Admin!",
+    });
+  }
+);

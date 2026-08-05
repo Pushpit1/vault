@@ -4,12 +4,14 @@ import { authenticate } from "../../middlewares/auth.middleware";
 
 import { createUserSchema } from "../../validators/user.validator";
 import { loginSchema } from "../../validators/auth.validator";
+import { authorize } from "../../middlewares/authorize.middleware";
 
 import {
   getUsers,
   createUser,
   loginUser,
   getProfile,
+  getAdminDashboard,
 } from "../../controllers/user.controller";
 
 const router = Router();
@@ -32,6 +34,13 @@ router.get(
   "/me",
   authenticate,
   getProfile
+);
+
+router.get(
+  "/admin",
+  authenticate,
+  authorize("ADMIN"),
+  getAdminDashboard
 );
 
 export default router;
