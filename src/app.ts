@@ -1,5 +1,5 @@
 import express from "express";
-
+import helmet from "helmet";
 import apiV1Routes from "./routes/v1";
 import { logger } from "./middlewares/logger.middleware";
 import { requestId } from "./middlewares/requestId.middleware";
@@ -7,7 +7,7 @@ import { notFound } from "./middlewares/notFound.middleware";
 import { errorHandler } from "./middlewares/error.middleware";
 
 const app = express();
-
+app.use(helmet());
 app.use(requestId);
 app.use(logger);
 app.use(express.json());
