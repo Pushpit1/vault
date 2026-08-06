@@ -177,37 +177,85 @@ export const userService = {
   },
 
   async logout(
-    refreshToken: string
-  ) {
-    try {
-      verifyRefreshToken(
-        refreshToken
-      );
-    } catch {
-      throw new UnauthorizedError(
-        "Invalid refresh token"
-      );
-    }
+  refreshToken: string
+) {
+  try {
+    verifyRefreshToken(
+      refreshToken
+    );
+  } catch {
+    throw new UnauthorizedError(
+      "Invalid refresh token"
+    );
+  }
 
-    const exists =
-      await refreshTokenRepository.exists(
-        refreshToken
-      );
-
-    if (!exists) {
-      throw new UnauthorizedError(
-        "Invalid refresh token"
-      );
-    }
-
-    await refreshTokenRepository.delete(
+  const exists =
+    await refreshTokenRepository.exists(
       refreshToken
     );
 
-    return {
-      message: "Logout successful",
-    };
-  },
+  if (!exists) {
+    throw new UnauthorizedError(
+      "Invalid refresh token"
+    );
+  }
+
+  await refreshTokenRepository.delete(
+    refreshToken
+  );
+
+  return {
+    message: "Logout successful",
+  };
+},
+
+async changePassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+) {
+  const user =
+    await userRepository.findById(
+      userId
+    );
+
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
+
+  const isPasswordValid =
+    await comparePassword(
+      currentPassword,
+      user.password
+    );
+
+  if (!isPasswordValid) {
+    throw new UnauthorizedError(
+      "Current password is incorrect"
+    );
+  }
+
+  const hashedPassword =
+    await hashPassword(
+      newPassword
+    );
+
+  await userRepository.updatePassword(
+    user.id,
+    hashedPassword
+  );
+
+  await refreshTokenRepository.deleteAllByUser(
+    user.id
+  );
+
+  return {
+    message:
+      "Password changed successfully. Please login again.",
+  };
+},
 
   async getProfile(
     userId: string

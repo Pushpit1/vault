@@ -14,7 +14,9 @@ export const userRepository = {
     });
   },
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(
+    email: string
+  ): Promise<User | null> {
     return prisma.user.findUnique({
       where: {
         email,
@@ -22,7 +24,9 @@ export const userRepository = {
     });
   },
 
-  async create(data: Prisma.UserCreateInput) {
+  async create(
+    data: Prisma.UserCreateInput
+  ) {
     return prisma.user.create({
       data,
       select: {
@@ -36,18 +40,24 @@ export const userRepository = {
   },
 
   async findById(id: string) {
-  return prisma.user.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-}
+    return prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  },
 
+  async updatePassword(
+    userId: string,
+    password: string
+  ) {
+    return prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password,
+      },
+    });
+  },
 };

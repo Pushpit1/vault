@@ -4,10 +4,10 @@ import { validate } from "../../middlewares/validate.middleware";
 import { authenticate } from "../../middlewares/auth.middleware";
 import { authorize } from "../../middlewares/authorize.middleware";
 
-import { createUserSchema } from "../../validators/user.validator";
-import { loginSchema } from "../../validators/auth.validator";
-import { refreshSchema } from "../../validators/refresh.validator";
-import { logoutSchema } from "../../validators/logout.validator";
+import {
+  loginSchema,
+  changePasswordSchema,
+} from "../../validators/auth.validator";
 
 import {
   getUsers,
@@ -15,6 +15,7 @@ import {
   loginUser,
   refreshToken,
   logoutUser,
+  changePassword,
   getProfile,
   getAdminDashboard,
 } from "../../controllers/user.controller";
@@ -24,9 +25,10 @@ const router = Router();
 router.get("/", getUsers);
 
 router.post(
-  "/",
-  validate(createUserSchema),
-  createUser
+  "/change-password",
+  authenticate,
+  validate(changePasswordSchema),
+  changePassword
 );
 
 router.post(
