@@ -1,4 +1,6 @@
 import { Prisma } from "../generated/prisma";
+import { JwtPayload } from "jsonwebtoken";
+
 import { userRepository } from "../repositories/user.repository";
 import { refreshTokenRepository } from "../repositories/refreshToken.repository";
 
@@ -10,6 +12,7 @@ import {
 import {
   generateAccessToken,
   generateRefreshToken,
+  verifyRefreshToken,
 } from "../utils/jwt/token";
 
 import { ConflictError } from "../errors/ConflictError";
@@ -22,17 +25,19 @@ export const userService = {
   },
 
   async createUser(data: Prisma.UserCreateInput) {
-    const existingUser = await userRepository.findByEmail(
-      data.email
-    );
+    const existingUser =
+      await userRepository.findByEmail(
+        data.email
+      );
 
     if (existingUser) {
-      throw new ConflictError("Email already exists");
+      throw new ConflictError(
+        "Email already exists"
+      );
     }
 
-    const hashedPassword = await hashPassword(
-      data.password
-    );
+    const hashedPassword =
+      await hashPassword(data.password);
 
     return userRepository.create({
       ...data,
@@ -76,6 +81,7 @@ export const userService = {
       generateRefreshToken(user.id);
 
     const expiresAt = new Date();
+
     expiresAt.setDate(
       expiresAt.getDate() + 7
     );
@@ -101,9 +107,61 @@ export const userService = {
     };
   },
 
-  async getProfile(userId: string) {
+  async refreshAccessToken(
+    refreshToken: string
+  ) {
+    let payload: JwtPayload;
+
+    try {
+      payload =
+        verifyRefreshToken(
+          refreshToken
+        ) as JwtPayload;
+    } catch {
+      throw new UnauthorizedError(
+        "Invalid refresh token"
+      );
+    }
+
+    const storedToken =
+      await refreshTokenRepository.findByToken(
+        refreshToken
+      );
+
+    if (!storedToken) {
+      throw new UnauthorizedError(
+        "Invalid refresh token"
+      );
+    }
+
+    if (
+      storedToken.user.id !==
+      payload.sub
+    ) {
+      throw new UnauthorizedError(
+        "Invalid refresh token"
+      );
+    }
+
+    const accessToken =
+      generateAccessToken(
+        storedToken.user.id,
+        storedToken.user.email,
+        storedToken.user.role
+      );
+
+    return {
+      accessToken,
+    };
+  },
+
+  async getProfile(
+    userId: string
+  ) {
     const user =
-      await userRepository.findById(userId);
+      await userRepository.findById(
+        userId
+      );
 
     if (!user) {
       throw new NotFoundError(

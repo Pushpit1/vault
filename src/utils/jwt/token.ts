@@ -33,3 +33,12 @@ export function generateRefreshToken(
     }
   );
 }
+
+export function verifyRefreshToken(
+  token: string
+) {
+  return jwt.verify(
+    token,
+    env.JWT_SECRET
+  ) as jwt.JwtPayload;
+}

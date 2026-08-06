@@ -4,7 +4,8 @@ import { userService } from "../services/user.service";
 
 export const getUsers = asyncHandler(
   async (_req: Request, res: Response) => {
-    const users = await userService.getAllUsers();
+    const users =
+      await userService.getAllUsers();
 
     res.status(200).json({
       success: true,
@@ -15,7 +16,10 @@ export const getUsers = asyncHandler(
 
 export const createUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const user = await userService.createUser(req.body);
+    const user =
+      await userService.createUser(
+        req.body
+      );
 
     res.status(201).json({
       success: true,
@@ -26,22 +30,14 @@ export const createUser = asyncHandler(
 
 export const loginUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password } =
+      req.body;
 
-    const user = await userService.login(email, password);
-
-    res.status(200).json({
-      success: true,
-      data: user,
-    });
-  }
-);
-
-export const getProfile = asyncHandler(
-  async (req: Request, res: Response) => {
-    const userId = req.user.sub;
-
-    const user = await userService.getProfile(userId);
+    const user =
+      await userService.login(
+        email,
+        password
+      );
 
     res.status(200).json({
       success: true,
@@ -50,11 +46,55 @@ export const getProfile = asyncHandler(
   }
 );
 
-export const getAdminDashboard = asyncHandler(
-  async (_req: Request, res: Response) => {
-    res.status(200).json({
-      success: true,
-      message: "Welcome Admin!",
-    });
-  }
-);
+export const refreshToken =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const { refreshToken } =
+        req.body;
+
+      const result =
+        await userService.refreshAccessToken(
+          refreshToken
+        );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    }
+  );
+
+export const getProfile =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const user =
+        await userService.getProfile(
+          req.user.sub
+        );
+
+      res.status(200).json({
+        success: true,
+        data: user,
+      });
+    }
+  );
+
+export const getAdminDashboard =
+  asyncHandler(
+    async (
+      _req: Request,
+      res: Response
+    ) => {
+      res.status(200).json({
+        success: true,
+        message:
+          "Welcome Admin!",
+      });
+    }
+  );
