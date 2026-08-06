@@ -64,9 +64,24 @@ export const refreshToken = asyncHandler(
         refreshToken
       );
 
+    res.cookie(
+      "refreshToken",
+      result.refreshToken,
+      {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge:
+          7 * 24 * 60 * 60 * 1000,
+      }
+    );
+
     res.status(200).json({
       success: true,
-      data: result,
+      data: {
+        accessToken:
+          result.accessToken,
+      },
     });
   }
 );

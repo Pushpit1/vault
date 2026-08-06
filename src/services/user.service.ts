@@ -139,6 +139,30 @@ export const userService = {
       );
     }
 
+    // Delete old Refresh Token
+    await refreshTokenRepository.delete(
+      refreshToken
+    );
+
+    // Generate new Refresh Token
+    const newRefreshToken =
+      generateRefreshToken(
+        storedToken.user.id
+      );
+
+    const expiresAt = new Date();
+    expiresAt.setDate(
+      expiresAt.getDate() + 7
+    );
+
+    // Save new Refresh Token
+    await refreshTokenRepository.create(
+      newRefreshToken,
+      storedToken.user.id,
+      expiresAt
+    );
+
+    // Generate new Access Token
     const accessToken =
       generateAccessToken(
         storedToken.user.id,
@@ -148,51 +172,42 @@ export const userService = {
 
     return {
       accessToken,
+      refreshToken: newRefreshToken,
     };
   },
 
   async logout(
-  refreshToken: string
-) {
-  console.log("\n========== LOGOUT ==========");
-  console.log("Refresh Token:", refreshToken);
+    refreshToken: string
+  ) {
+    try {
+      verifyRefreshToken(
+        refreshToken
+      );
+    } catch {
+      throw new UnauthorizedError(
+        "Invalid refresh token"
+      );
+    }
 
-  try {
-    verifyRefreshToken(refreshToken);
-    console.log("✅ JWT Verified");
-  } catch (error) {
-    console.log("❌ JWT Verification Failed");
-    console.log(error);
+    const exists =
+      await refreshTokenRepository.exists(
+        refreshToken
+      );
 
-    throw new UnauthorizedError(
-      "Invalid refresh token"
-    );
-  }
+    if (!exists) {
+      throw new UnauthorizedError(
+        "Invalid refresh token"
+      );
+    }
 
-  const exists =
-    await refreshTokenRepository.exists(
+    await refreshTokenRepository.delete(
       refreshToken
     );
 
-  console.log("Exists In Database:", exists);
-
-  if (!exists) {
-    throw new UnauthorizedError(
-      "Invalid refresh token"
-    );
-  }
-
-  await refreshTokenRepository.delete(
-    refreshToken
-  );
-
-  console.log("✅ Refresh Token Deleted");
-  console.log("============================\n");
-
-  return {
-    message: "Logout successful",
-  };
-},
+    return {
+      message: "Logout successful",
+    };
+  },
 
   async getProfile(
     userId: string
