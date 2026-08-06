@@ -1,5 +1,6 @@
 import { Prisma } from "../generated/prisma";
 import { userRepository } from "../repositories/user.repository";
+import { refreshTokenRepository } from "../repositories/refreshToken.repository";
 
 import {
   comparePassword,
@@ -26,9 +27,7 @@ export const userService = {
     );
 
     if (existingUser) {
-      throw new ConflictError(
-        "Email already exists"
-      );
+      throw new ConflictError("Email already exists");
     }
 
     const hashedPassword = await hashPassword(
@@ -47,7 +46,7 @@ export const userService = {
   ) {
     const user =
       await userRepository.findByEmail(email);
-console.log("User Found:", user);
+
     if (!user) {
       throw new UnauthorizedError(
         "Invalid email or password"
@@ -59,7 +58,6 @@ console.log("User Found:", user);
         password,
         user.password
       );
-      console.log("Password Valid:", isPasswordValid);
 
     if (!isPasswordValid) {
       throw new UnauthorizedError(
@@ -76,6 +74,17 @@ console.log("User Found:", user);
 
     const refreshToken =
       generateRefreshToken(user.id);
+
+    const expiresAt = new Date();
+    expiresAt.setDate(
+      expiresAt.getDate() + 7
+    );
+
+    await refreshTokenRepository.create(
+      refreshToken,
+      user.id,
+      expiresAt
+    );
 
     return {
       accessToken,
