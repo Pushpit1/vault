@@ -5,6 +5,9 @@ import {
   hashPassword,
 } from "../utils/auth/password";
 import { generateAccessToken } from "../utils/jwt/token";
+import { ConflictError } from "../errors/ConflictError";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { NotFoundError } from "../errors/NotFoundError";
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
@@ -14,7 +17,7 @@ export const userService = {
     const existingUser = await userRepository.findByEmail(data.email);
 
     if (existingUser) {
-      throw new Error("Email already exists");
+      throw new ConflictError("Email already exists");
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -29,7 +32,9 @@ export const userService = {
     const user = await userRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error("Invalid email or password");
+      throw new UnauthorizedError(
+  "Invalid email or password"
+);
     }
 
     const isPasswordValid = await comparePassword(
@@ -38,7 +43,9 @@ export const userService = {
     );
 
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password");
+      throw new UnauthorizedError(
+  "Invalid email or password"
+);
     }
 
    const accessToken = generateAccessToken(
@@ -66,7 +73,7 @@ return {
   const user = await userRepository.findById(userId);
 
   if (!user) {
-    throw new Error("User not found");
+    throw new NotFoundError("User not found");
   }
 
   return user;
