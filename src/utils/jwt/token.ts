@@ -19,3 +19,17 @@ export function generateAccessToken(
     }
   );
 }
+
+export function generateRefreshToken(
+  userId: string
+) {
+  return jwt.sign(
+    {
+      sub: userId,
+    },
+    env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
+}
