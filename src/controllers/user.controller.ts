@@ -142,6 +142,27 @@ export const changePassword =
     }
   );
 
+  export const forgotPassword =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const { email } =
+        req.body;
+
+      const result =
+        await userService.forgotPassword(
+          email
+        );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    }
+  );
+
 export const getProfile = asyncHandler(
   async (req: Request, res: Response) => {
     const user =

@@ -19,6 +19,10 @@ import { ConflictError } from "../errors/ConflictError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { NotFoundError } from "../errors/NotFoundError";
 
+import { passwordResetTokenRepository } from "../repositories/passwordResetToken.repository";
+
+import { generatePasswordResetToken } from "../utils/auth/resetToken";
+
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
@@ -254,6 +258,43 @@ async changePassword(
   return {
     message:
       "Password changed successfully. Please login again.",
+  };
+},
+
+async forgotPassword(
+  email: string
+) {
+  const user =
+    await userRepository.findByEmail(
+      email
+    );
+
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
+
+  await passwordResetTokenRepository.deleteAllByUser(
+    user.id
+  );
+
+  const token =
+    generatePasswordResetToken();
+
+  const expiresAt = new Date();
+  expiresAt.setMinutes(
+    expiresAt.getMinutes() + 15
+  );
+
+  await passwordResetTokenRepository.create(
+    token,
+    user.id,
+    expiresAt
+  );
+
+  return {
+    resetToken: token,
   };
 },
 
