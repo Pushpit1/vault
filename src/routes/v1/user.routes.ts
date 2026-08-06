@@ -7,12 +7,14 @@ import { authorize } from "../../middlewares/authorize.middleware";
 import { createUserSchema } from "../../validators/user.validator";
 import { loginSchema } from "../../validators/auth.validator";
 import { refreshSchema } from "../../validators/refresh.validator";
+import { logoutSchema } from "../../validators/logout.validator";
 
 import {
   getUsers,
   createUser,
   loginUser,
   refreshToken,
+  logoutUser,
   getProfile,
   getAdminDashboard,
 } from "../../controllers/user.controller";
@@ -37,6 +39,12 @@ router.post(
   "/refresh",
   validate(refreshSchema),
   refreshToken
+);
+
+router.post(
+  "/logout",
+  validate(logoutSchema),
+  logoutUser
 );
 
 router.get(

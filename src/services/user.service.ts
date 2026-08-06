@@ -26,9 +26,7 @@ export const userService = {
 
   async createUser(data: Prisma.UserCreateInput) {
     const existingUser =
-      await userRepository.findByEmail(
-        data.email
-      );
+      await userRepository.findByEmail(data.email);
 
     if (existingUser) {
       throw new ConflictError(
@@ -81,7 +79,6 @@ export const userService = {
       generateRefreshToken(user.id);
 
     const expiresAt = new Date();
-
     expiresAt.setDate(
       expiresAt.getDate() + 7
     );
@@ -95,7 +92,6 @@ export const userService = {
     return {
       accessToken,
       refreshToken,
-
       user: {
         id: user.id,
         name: user.name,
@@ -154,6 +150,49 @@ export const userService = {
       accessToken,
     };
   },
+
+  async logout(
+  refreshToken: string
+) {
+  console.log("\n========== LOGOUT ==========");
+  console.log("Refresh Token:", refreshToken);
+
+  try {
+    verifyRefreshToken(refreshToken);
+    console.log("✅ JWT Verified");
+  } catch (error) {
+    console.log("❌ JWT Verification Failed");
+    console.log(error);
+
+    throw new UnauthorizedError(
+      "Invalid refresh token"
+    );
+  }
+
+  const exists =
+    await refreshTokenRepository.exists(
+      refreshToken
+    );
+
+  console.log("Exists In Database:", exists);
+
+  if (!exists) {
+    throw new UnauthorizedError(
+      "Invalid refresh token"
+    );
+  }
+
+  await refreshTokenRepository.delete(
+    refreshToken
+  );
+
+  console.log("✅ Refresh Token Deleted");
+  console.log("============================\n");
+
+  return {
+    message: "Logout successful",
+  };
+},
 
   async getProfile(
     userId: string

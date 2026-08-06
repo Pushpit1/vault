@@ -4,8 +4,7 @@ import { userService } from "../services/user.service";
 
 export const getUsers = asyncHandler(
   async (_req: Request, res: Response) => {
-    const users =
-      await userService.getAllUsers();
+    const users = await userService.getAllUsers();
 
     res.status(200).json({
       success: true,
@@ -16,10 +15,7 @@ export const getUsers = asyncHandler(
 
 export const createUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const user =
-      await userService.createUser(
-        req.body
-      );
+    const user = await userService.createUser(req.body);
 
     res.status(201).json({
       success: true,
@@ -30,13 +26,66 @@ export const createUser = asyncHandler(
 
 export const loginUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const { email, password } =
-      req.body;
+    const { email, password } = req.body;
 
+    const result = await userService.login(
+      email,
+      password
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+);
+
+export const refreshToken = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+
+console.log("Controller Body:", req.body);
+console.log("Type:", typeof refreshToken);
+console.log("Length:", refreshToken.length);
+console.log("Value:", JSON.stringify(refreshToken));
+
+    const result =
+      await userService.refreshAccessToken(
+        refreshToken
+      );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+);
+
+export const logoutUser = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+
+    console.log("========== CONTROLLER ==========");
+    console.log("Body:", req.body);
+    console.log("Type:", typeof refreshToken);
+    console.log("Length:", refreshToken?.length);
+    console.log("Raw:", JSON.stringify(refreshToken));
+    console.log("===============================");
+
+    const result = await userService.logout(refreshToken);
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+);
+
+export const getProfile = asyncHandler(
+  async (req: Request, res: Response) => {
     const user =
-      await userService.login(
-        email,
-        password
+      await userService.getProfile(
+        req.user.sub
       );
 
     res.status(200).json({
@@ -46,55 +95,11 @@ export const loginUser = asyncHandler(
   }
 );
 
-export const refreshToken =
-  asyncHandler(
-    async (
-      req: Request,
-      res: Response
-    ) => {
-      const { refreshToken } =
-        req.body;
-
-      const result =
-        await userService.refreshAccessToken(
-          refreshToken
-        );
-
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
-    }
-  );
-
-export const getProfile =
-  asyncHandler(
-    async (
-      req: Request,
-      res: Response
-    ) => {
-      const user =
-        await userService.getProfile(
-          req.user.sub
-        );
-
-      res.status(200).json({
-        success: true,
-        data: user,
-      });
-    }
-  );
-
-export const getAdminDashboard =
-  asyncHandler(
-    async (
-      _req: Request,
-      res: Response
-    ) => {
-      res.status(200).json({
-        success: true,
-        message:
-          "Welcome Admin!",
-      });
-    }
-  );
+export const getAdminDashboard = asyncHandler(
+  async (_req: Request, res: Response) => {
+    res.status(200).json({
+      success: true,
+      message: "Welcome Admin!",
+    });
+  }
+);

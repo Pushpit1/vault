@@ -15,7 +15,9 @@ export const refreshTokenRepository = {
     });
   },
 
-  async findByToken(token: string) {
+  async findByToken(
+    token: string
+  ) {
     return prisma.refreshToken.findUnique({
       where: {
         token,
@@ -26,7 +28,9 @@ export const refreshTokenRepository = {
     });
   },
 
-  async delete(token: string) {
+  async delete(
+    token: string
+  ) {
     return prisma.refreshToken.delete({
       where: {
         token,
@@ -34,11 +38,26 @@ export const refreshTokenRepository = {
     });
   },
 
-  async deleteAllByUser(userId: string) {
+  async deleteAllByUser(
+    userId: string
+  ) {
     return prisma.refreshToken.deleteMany({
       where: {
         userId,
       },
     });
   },
+
+  async exists(
+    token: string
+  ) {
+    const refreshToken =
+      await prisma.refreshToken.findUnique({
+        where: {
+          token,
+        },
+      });
+
+    return !!refreshToken;
+  }
 };
