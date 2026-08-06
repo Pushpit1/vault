@@ -37,13 +37,11 @@ router.post(
 
 router.post(
   "/refresh",
-  validate(refreshSchema),
   refreshToken
 );
 
 router.post(
   "/logout",
-  validate(logoutSchema),
   logoutUser
 );
 

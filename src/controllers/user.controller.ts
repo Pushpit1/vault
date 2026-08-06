@@ -33,21 +33,31 @@ export const loginUser = asyncHandler(
       password
     );
 
+    res.cookie(
+      "refreshToken",
+      result.refreshToken,
+      {
+        httpOnly: true,
+        secure: false, // true in production (HTTPS)
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      }
+    );
+
     res.status(200).json({
       success: true,
-      data: result,
+      data: {
+        accessToken: result.accessToken,
+        user: result.user,
+      },
     });
   }
 );
 
 export const refreshToken = asyncHandler(
   async (req: Request, res: Response) => {
-    const { refreshToken } = req.body;
-
-console.log("Controller Body:", req.body);
-console.log("Type:", typeof refreshToken);
-console.log("Length:", refreshToken.length);
-console.log("Value:", JSON.stringify(refreshToken));
+    const refreshToken =
+      req.cookies.refreshToken;
 
     const result =
       await userService.refreshAccessToken(
@@ -63,16 +73,22 @@ console.log("Value:", JSON.stringify(refreshToken));
 
 export const logoutUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const { refreshToken } = req.body;
+    const refreshToken =
+      req.cookies.refreshToken;
 
-    console.log("========== CONTROLLER ==========");
-    console.log("Body:", req.body);
-    console.log("Type:", typeof refreshToken);
-    console.log("Length:", refreshToken?.length);
-    console.log("Raw:", JSON.stringify(refreshToken));
-    console.log("===============================");
+    const result =
+      await userService.logout(
+        refreshToken
+      );
 
-    const result = await userService.logout(refreshToken);
+    res.clearCookie(
+      "refreshToken",
+      {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+      }
+    );
 
     res.status(200).json({
       success: true,
