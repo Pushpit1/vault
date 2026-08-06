@@ -7,6 +7,8 @@ import { authorize } from "../../middlewares/authorize.middleware";
 import {
   loginSchema,
   changePasswordSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../../validators/auth.validator";
 
 import {
@@ -16,6 +18,8 @@ import {
   refreshToken,
   logoutUser,
   changePassword,
+  forgotPassword,
+  resetPassword,
   getProfile,
   getAdminDashboard,
 } from "../../controllers/user.controller";
@@ -29,6 +33,22 @@ router.post(
   authenticate,
   validate(changePasswordSchema),
   changePassword
+);
+
+router.post(
+  "/forgot-password",
+  validate(
+    forgotPasswordSchema
+  ),
+  forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  validate(
+    resetPasswordSchema
+  ),
+  resetPassword
 );
 
 router.post(

@@ -298,6 +298,58 @@ async forgotPassword(
   };
 },
 
+async resetPassword(
+  token: string,
+  newPassword: string
+) {
+  const resetToken =
+    await passwordResetTokenRepository.findByToken(
+      token
+    );
+
+  if (!resetToken) {
+    throw new UnauthorizedError(
+      "Invalid reset token"
+    );
+  }
+
+  if (
+    resetToken.expiresAt <
+    new Date()
+  ) {
+    await passwordResetTokenRepository.delete(
+      token
+    );
+
+    throw new UnauthorizedError(
+      "Reset token has expired"
+    );
+  }
+
+  const hashedPassword =
+    await hashPassword(
+      newPassword
+    );
+
+  await userRepository.updatePassword(
+    resetToken.user.id,
+    hashedPassword
+  );
+
+  await passwordResetTokenRepository.delete(
+    token
+  );
+
+  await refreshTokenRepository.deleteAllByUser(
+    resetToken.user.id
+  );
+
+  return {
+    message:
+      "Password reset successful. Please login again.",
+  };
+},
+
   async getProfile(
     userId: string
   ) {

@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -24,42 +23,26 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  refreshTokens      RefreshToken[]
+  refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
 }
 
 model RefreshToken {
-  id String @id @default(cuid())
-
-  token String @unique
-
+  id        String   @id @default(cuid())
+  token     String   @unique
   expiresAt DateTime
-
   createdAt DateTime @default(now())
 
   userId String
-
-  user User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade
-  )
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {
-  id String @id @default(cuid())
-
-  token String @unique
-
+  id        String   @id @default(cuid())
+  token     String   @unique
   expiresAt DateTime
-
   createdAt DateTime @default(now())
 
   userId String
-
-  user User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade
-  )
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

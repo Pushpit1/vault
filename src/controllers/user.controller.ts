@@ -162,7 +162,30 @@ export const changePassword =
       });
     }
   );
+export const resetPassword =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const {
+        token,
+        newPassword,
+      } = req.body;
 
+      const result =
+        await userService.resetPassword(
+          token,
+          newPassword
+        );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    }
+  );
+  
 export const getProfile = asyncHandler(
   async (req: Request, res: Response) => {
     const user =
