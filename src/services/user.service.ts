@@ -23,6 +23,8 @@ import { passwordResetTokenRepository } from "../repositories/passwordResetToken
 
 import { generatePasswordResetToken } from "../utils/auth/resetToken";
 
+import { emailVerificationTokenRepository } from "../repositories/emailVerificationToken.repository";
+
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
@@ -295,6 +297,48 @@ async forgotPassword(
 
   return {
     resetToken: token,
+  };
+},
+async generateEmailVerification(
+  email: string
+) {
+  const user =
+    await userRepository.findByEmail(
+      email
+    );
+
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
+
+  if (user.isVerified) {
+    throw new ConflictError(
+      "Email already verified"
+    );
+  }
+
+  await emailVerificationTokenRepository.deleteAllByUser(
+    user.id
+  );
+
+  const token =
+    generatePasswordResetToken();
+
+  const expiresAt = new Date();
+  expiresAt.setHours(
+    expiresAt.getHours() + 24
+  );
+
+  await emailVerificationTokenRepository.create(
+    token,
+    user.id,
+    expiresAt
+  );
+
+  return {
+    verificationToken: token,
   };
 },
 

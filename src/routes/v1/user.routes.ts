@@ -9,6 +9,7 @@ import {
   changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  emailVerificationSchema
 } from "../../validators/auth.validator";
 
 import {
@@ -22,6 +23,7 @@ import {
   resetPassword,
   getProfile,
   getAdminDashboard,
+  generateEmailVerification
 } from "../../controllers/user.controller";
 
 const router = Router();
@@ -41,6 +43,14 @@ router.post(
     forgotPasswordSchema
   ),
   forgotPassword
+);
+
+router.post(
+  "/verify-email",
+  validate(
+    emailVerificationSchema
+  ),
+  generateEmailVerification
 );
 
 router.post(

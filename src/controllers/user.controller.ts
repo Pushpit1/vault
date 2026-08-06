@@ -162,6 +162,28 @@ export const changePassword =
       });
     }
   );
+
+  export const generateEmailVerification =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const { email } =
+        req.body;
+
+      const result =
+        await userService.generateEmailVerification(
+          email
+        );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    }
+  );
+  
 export const resetPassword =
   asyncHandler(
     async (
@@ -185,7 +207,7 @@ export const resetPassword =
       });
     }
   );
-  
+
 export const getProfile = asyncHandler(
   async (req: Request, res: Response) => {
     const user =
