@@ -1,3 +1,7 @@
+
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
+
 import express from "express";
 import helmet from "helmet";
 import apiV1Routes from "./routes/v1";
@@ -7,6 +11,8 @@ import { notFound } from "./middlewares/notFound.middleware";
 import { errorHandler } from "./middlewares/error.middleware";
 import { corsMiddleware } from "./config/cors";
 import compression from "compression";
+
+
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet());
@@ -15,6 +21,13 @@ app.use(compression());
 app.use(requestId);
 app.use(logger);
 app.use(express.json());
+
+console.log("Swagger route registered");
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 app.get("/", (_req, res) => {
   res.send("Vault API is running 🚀");
