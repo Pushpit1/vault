@@ -183,7 +183,7 @@ export const changePassword =
       });
     }
   );
-  
+
 export const resetPassword =
   asyncHandler(
     async (
@@ -221,6 +221,31 @@ export const getProfile = asyncHandler(
     });
   }
 );
+
+export const updateProfile =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      const {
+        name,
+        email,
+      } = req.body;
+
+      const user =
+        await userService.updateProfile(
+          req.user.sub,
+          name,
+          email
+        );
+
+      res.status(200).json({
+        success: true,
+        data: user,
+      });
+    }
+  );
 
 export const getAdminDashboard = asyncHandler(
   async (_req: Request, res: Response) => {

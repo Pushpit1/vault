@@ -394,6 +394,60 @@ async resetPassword(
   };
 },
 
+async updateProfile(
+  userId: string,
+  name?: string,
+  email?: string
+) {
+  const user =
+    await userRepository.findById(
+      userId
+    );
+
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
+
+  if (
+    email &&
+    email !== user.email
+  ) {
+    const existingUser =
+      await userRepository.findByEmail(
+        email
+      );
+
+    if (existingUser) {
+      throw new ConflictError(
+        "Email already exists"
+      );
+    }
+  }
+
+  const updateData: {
+    name?: string;
+    email?: string;
+    isVerified?: boolean;
+  } = {
+    name,
+  };
+
+  if (
+    email &&
+    email !== user.email
+  ) {
+    updateData.email = email;
+    updateData.isVerified = false;
+  }
+
+  return userRepository.updateProfile(
+    userId,
+    updateData
+  );
+},
+
   async getProfile(
     userId: string
   ) {

@@ -47,7 +47,7 @@ export const userRepository = {
     });
   },
 
-  async updatePassword(
+    async updatePassword(
     userId: string,
     password: string
   ) {
@@ -60,4 +60,31 @@ export const userRepository = {
       },
     });
   },
+
+  async updateProfile(
+    id: string,
+    data: {
+  name?: string;
+  email?: string;
+  isVerified?: boolean;
+}
+  ) {
+    return prisma.user.update({
+      where: {
+        id,
+      },
+      data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  },
 };
+
+

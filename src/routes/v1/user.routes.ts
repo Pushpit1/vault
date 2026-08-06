@@ -9,8 +9,13 @@ import {
   changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  emailVerificationSchema
+  emailVerificationSchema ,
 } from "../../validators/auth.validator";
+
+import {
+  createUserSchema,
+  updateProfileSchema,
+} from "../../validators/user.validator";
 
 import {
   getUsers,
@@ -23,12 +28,19 @@ import {
   resetPassword,
   getProfile,
   getAdminDashboard,
-  generateEmailVerification
+  generateEmailVerification ,
+  updateProfile
 } from "../../controllers/user.controller";
 
 const router = Router();
 
 router.get("/", getUsers);
+
+router.post(
+  "/",
+  validate(createUserSchema),
+  createUser
+);
 
 router.post(
   "/change-password",
@@ -81,6 +93,15 @@ router.get(
   "/me",
   authenticate,
   getProfile
+);
+
+router.patch(
+  "/me",
+  authenticate,
+  validate(
+    updateProfileSchema
+  ),
+  updateProfile
 );
 
 router.get(
