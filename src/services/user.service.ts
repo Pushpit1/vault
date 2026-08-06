@@ -25,6 +25,8 @@ import { generatePasswordResetToken } from "../utils/auth/resetToken";
 
 import { emailVerificationTokenRepository } from "../repositories/emailVerificationToken.repository";
 
+import { emailService } from "./email.service";
+
 export const userService = {
   async getAllUsers() {
     return userRepository.findAll();
@@ -337,9 +339,15 @@ async generateEmailVerification(
     expiresAt
   );
 
-  return {
-    verificationToken: token,
-  };
+  await emailService.sendVerificationEmail(
+  user.email,
+  token
+);
+
+return {
+  message:
+    "Verification email sent successfully.",
+};
 },
 
 async resetPassword(

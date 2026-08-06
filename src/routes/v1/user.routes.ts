@@ -5,6 +5,8 @@ import { authenticate } from "../../middlewares/auth.middleware";
 import { authorize } from "../../middlewares/authorize.middleware";
 import { upload } from "../../middlewares/upload.middleware";
 
+import { emailService } from "../../services/email.service";
+
 import {
   loginSchema,
   changePasswordSchema,
@@ -118,6 +120,21 @@ router.get(
   authenticate,
   authorize("ADMIN"),
   getAdminDashboard
+);
+
+router.get(
+  "/test-email",
+  async (_req, res) => {
+    await emailService.sendVerificationEmail(
+      "YOUR_EMAIL@gmail.com",
+      "test-token-123"
+    );
+
+    res.json({
+      success: true,
+      message: "Email sent!",
+    });
+  }
 );
 
 export default router;
