@@ -85,6 +85,29 @@ export const userRepository = {
       },
     });
   },
+
+
+async updateAvatar(
+  userId: string,
+  avatar: string
+) {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      avatar,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      avatar: true,
+      role: true,
+      isVerified: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+},
 };
-
-

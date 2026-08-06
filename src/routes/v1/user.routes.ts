@@ -3,6 +3,7 @@ import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware";
 import { authenticate } from "../../middlewares/auth.middleware";
 import { authorize } from "../../middlewares/authorize.middleware";
+import { upload } from "../../middlewares/upload.middleware";
 
 import {
   loginSchema,
@@ -29,7 +30,8 @@ import {
   getProfile,
   getAdminDashboard,
   generateEmailVerification ,
-  updateProfile
+  updateProfile ,
+  updateAvatar
 } from "../../controllers/user.controller";
 
 const router = Router();
@@ -102,6 +104,13 @@ router.patch(
     updateProfileSchema
   ),
   updateProfile
+);
+
+router.patch(
+  "/me/avatar",
+  authenticate,
+  upload.single("avatar"),
+  updateAvatar
 );
 
 router.get(

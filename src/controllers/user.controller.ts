@@ -247,6 +247,34 @@ export const updateProfile =
     }
   );
 
+  export const updateAvatar =
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response
+    ) => {
+      if (!req.file) {
+        res.status(400).json({
+          success: false,
+          message: "Avatar is required",
+        });
+
+        return;
+      }
+
+      const user =
+        await userService.updateAvatar(
+          req.user.sub,
+          req.file.filename
+        );
+
+      res.status(200).json({
+        success: true,
+        data: user,
+      });
+    }
+  );
+
 export const getAdminDashboard = asyncHandler(
   async (_req: Request, res: Response) => {
     res.status(200).json({

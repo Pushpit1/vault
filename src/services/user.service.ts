@@ -448,6 +448,27 @@ async updateProfile(
   );
 },
 
+async updateAvatar(
+  userId: string,
+  avatar: string
+) {
+  const user =
+    await userRepository.findById(
+      userId
+    );
+
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
+
+  return userRepository.updateAvatar(
+    userId,
+    avatar
+  );
+},
+
   async getProfile(
     userId: string
   ) {
