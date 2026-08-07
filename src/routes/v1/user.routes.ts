@@ -37,7 +37,7 @@ import {
 } from "../../controllers/user.controller";
 
 const router = Router();
-
+console.log("User routes loaded");
 router.get("/", getUsers);
 
 router.post(
@@ -136,5 +136,12 @@ router.get(
     });
   }
 );
+
+router.get("/test", (_req, res) => {
+  res.json({
+    success: true,
+    message: "User routes working",
+  });
+});
 
 export default router;

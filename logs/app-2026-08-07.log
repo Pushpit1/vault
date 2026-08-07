@@ -1,0 +1,15 @@
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:51:30"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:51:53"}
+{"level":"info","message":{"duration":"8ms","ip":"::1","method":"GET","requestId":"67adeeaf-d835-4667-b114-bd6ced84d5d5","status":304,"url":"/api/v1/health"},"timestamp":"2026-08-07 11:51:56"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:55:41"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:55:54"}
+{"duration":"5ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"e12062c1-ad35-4466-b646-91f15457bffd","status":304,"timestamp":"2026-08-07 11:56:00","url":"/api/v1/health"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:58:46"}
+{"duration":"96ms","ip":"::1","level":"info","message":"HTTP Request","method":"POST","requestId":"0bb3200b-9d39-4d9e-bca9-9da3983b0fd6","status":400,"timestamp":"2026-08-07 11:59:21","url":"/api/v1/users/login"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:59:53"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 11:59:58"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 12:00:49"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 12:00:54"}
+{"ip":"::1","level":"error","message":"Unhandled Error Testing Winston Error Logger","method":"GET","requestId":"f291e0f9-1d64-4649-b446-97476f166847","stack":"Error: Testing Winston Error Logger\n    at <anonymous> (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\src\\routes\\v1\\user.routes.ts:148:9)\n    at Layer.handleRequest (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\index.js:295:15\n    at processParams (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\index.js:582:12)\n    at next (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\index.js:291:5)\n    at router.handle (C:\\Users\\pushp\\OneDrive\\Documents\\Vault\\node_modules\\router\\index.js:186:3)","status":500,"timestamp":"2026-08-07 12:00:58","url":"/api/v1/users/error-test"}
+{"duration":"13ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"f291e0f9-1d64-4649-b446-97476f166847","status":500,"timestamp":"2026-08-07 12:00:58","url":"/api/v1/users/error-test"}
+{"level":"info","message":"Logger initialized","timestamp":"2026-08-07 12:02:40"}
