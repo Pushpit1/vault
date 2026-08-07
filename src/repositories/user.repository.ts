@@ -3,17 +3,19 @@ import { Prisma, User } from "../generated/prisma";
 
 export const userRepository = {
   async findAll(
-    skip: number,
-    take: number,
-    where: Prisma.UserWhereInput
-  ) {
+  skip: number,
+  take: number,
+  where: Prisma.UserWhereInput,
+  orderBy: Prisma.UserOrderByWithRelationInput
+) {
     const [users, total] =
       await prisma.$transaction([
-        prisma.user.findMany({
-          skip,
-          take,
-          where,
-          select: {
+       prisma.user.findMany({
+  skip,
+  take,
+  where,
+  orderBy,
+  select: {
             id: true,
             name: true,
             email: true,

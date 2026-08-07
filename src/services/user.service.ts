@@ -4,7 +4,7 @@ import { getPagination } from "../utils/pagination";
 import { userRepository } from "../repositories/user.repository";
 import { buildUserFilter } from "../utils/filter";
 import { refreshTokenRepository } from "../repositories/refreshToken.repository";
-
+import { buildUserSorting } from "../utils/sorting";
 import {
   comparePassword,
   hashPassword,
@@ -29,12 +29,14 @@ import { emailVerificationTokenRepository } from "../repositories/emailVerificat
 import { emailService } from "./email.service";
 
 export const userService = {
-  async getAllUsers(
+ async getAllUsers(
   page?: number,
   limit?: number,
   role?: string,
   isVerified?: string,
-  search?: string
+  search?: string ,
+  sort?: string,
+  order?: string
 ) {
   const pagination = getPagination({
     page,
@@ -47,12 +49,19 @@ export const userService = {
     search,
   });
 
+  const orderBy =
+  buildUserSorting({
+    sort,
+    order,
+  });
+
   const result =
-    await userRepository.findAll(
-      pagination.skip,
-      pagination.limit,
-      where
-    );
+  await userRepository.findAll(
+    pagination.skip,
+    pagination.limit,
+    where,
+    orderBy
+  );
 
   return {
     data: result.users,

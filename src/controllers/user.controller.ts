@@ -8,6 +8,8 @@ type GetUsersQuery = {
   role?: string;
   isVerified?: string;
   search?: string;
+  sort?: string;
+  order?: string;
 };
 
 export const getUsers = asyncHandler(
@@ -34,9 +36,12 @@ export const getUsers = asyncHandler(
 
     req.query.isVerified,
 
-    req.query.search
-  );
+    req.query.search,
 
+    req.query.sort,
+
+    req.query.order
+  );
     res.status(200).json({
       success: true,
       data: users.data,
