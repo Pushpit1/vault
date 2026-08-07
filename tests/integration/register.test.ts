@@ -4,11 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import app from "../../src/app";
 import { prisma } from "../../src/config/prisma";
 
-const testUser = {
-  name: "Integration Test User",
-  email: "integration@test.com",
-  password: "Password123",
-};
+import { testUser } from "../fixtures/user.fixture";
 
 describe("User Registration", () => {
   beforeAll(async () => {
