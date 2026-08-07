@@ -8,7 +8,9 @@ import {
 
 import app from "../../src/app";
 
-import { testUser } from "../fixtures/user.fixture";
+import { createTestUser } from "../fixtures/user.factory";
+
+const testUser = createTestUser();
 import { cleanupUser } from "../helpers/db.helper";
 import { registerUser } from "../helpers/user.helper";
 
@@ -17,7 +19,7 @@ describe("Reset Password", () => {
 
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-    await registerUser();
+await registerUser(testUser);
 
     const forgotResponse = await request(app)
       .post("/api/v1/users/forgot-password")

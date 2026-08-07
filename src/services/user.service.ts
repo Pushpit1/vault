@@ -1,7 +1,8 @@
 import { Prisma } from "../generated/prisma";
 import { JwtPayload } from "jsonwebtoken";
-
+import { getPagination } from "../utils/pagination";
 import { userRepository } from "../repositories/user.repository";
+import { buildUserFilter } from "../utils/filter";
 import { refreshTokenRepository } from "../repositories/refreshToken.repository";
 
 import {
@@ -28,9 +29,43 @@ import { emailVerificationTokenRepository } from "../repositories/emailVerificat
 import { emailService } from "./email.service";
 
 export const userService = {
-  async getAllUsers() {
-    return userRepository.findAll();
-  },
+  async getAllUsers(
+  page?: number,
+  limit?: number,
+  role?: string,
+  isVerified?: string,
+  search?: string
+) {
+  const pagination = getPagination({
+    page,
+    limit,
+  });
+
+  const where = buildUserFilter({
+    role,
+    isVerified,
+    search,
+  });
+
+  const result =
+    await userRepository.findAll(
+      pagination.skip,
+      pagination.limit,
+      where
+    );
+
+  return {
+    data: result.users,
+    meta: {
+      page: pagination.page,
+      limit: pagination.limit,
+      total: result.total,
+      totalPages: Math.ceil(
+        result.total / pagination.limit
+      ),
+    },
+  };
+},
 
   async createUser(data: Prisma.UserCreateInput) {
     const existingUser =
@@ -477,20 +512,16 @@ async updateAvatar(
   );
 },
 
-  async getProfile(
-    userId: string
-  ) {
-    const user =
-      await userRepository.findById(
-        userId
-      );
+  async getProfile(userId: string) {
+  const user =
+    await userRepository.findPublicById(userId);
 
-    if (!user) {
-      throw new NotFoundError(
-        "User not found"
-      );
-    }
+  if (!user) {
+    throw new NotFoundError(
+      "User not found"
+    );
+  }
 
-    return user;
-  },
+  return user;
+},
 };

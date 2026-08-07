@@ -2,16 +2,38 @@ import prisma from "../db/prisma";
 import { Prisma, User } from "../generated/prisma";
 
 export const userRepository = {
-  async findAll() {
-    return prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+  async findAll(
+    skip: number,
+    take: number,
+    where: Prisma.UserWhereInput
+  ) {
+    const [users, total] =
+      await prisma.$transaction([
+        prisma.user.findMany({
+          skip,
+          take,
+          where,
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            isVerified: true,
+            avatar: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        }),
+
+        prisma.user.count({
+          where,
+        }),
+      ]);
+
+    return {
+      users,
+      total,
+    };
   },
 
   async findByEmail(
@@ -33,6 +55,9 @@ export const userRepository = {
         id: true,
         name: true,
         email: true,
+        role: true,
+        isVerified: true,
+        avatar: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -47,7 +72,25 @@ export const userRepository = {
     });
   },
 
-    async updatePassword(
+  async findPublicById(id: string) {
+    return prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isVerified: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  },
+
+  async updatePassword(
     userId: string,
     password: string
   ) {
@@ -64,10 +107,10 @@ export const userRepository = {
   async updateProfile(
     id: string,
     data: {
-  name?: string;
-  email?: string;
-  isVerified?: boolean;
-}
+      name?: string;
+      email?: string;
+      isVerified?: boolean;
+    }
   ) {
     return prisma.user.update({
       where: {
@@ -80,34 +123,34 @@ export const userRepository = {
         email: true,
         role: true,
         isVerified: true,
+        avatar: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   },
 
-
-async updateAvatar(
-  userId: string,
-  avatar: string
-) {
-  return prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      avatar,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      avatar: true,
-      role: true,
-      isVerified: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-},
+  async updateAvatar(
+    userId: string,
+    avatar: string
+  ) {
+    return prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        avatar,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        avatar: true,
+        role: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  },
 };

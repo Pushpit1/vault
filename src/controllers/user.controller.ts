@@ -2,13 +2,45 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { userService } from "../services/user.service";
 
+type GetUsersQuery = {
+  page?: string;
+  limit?: string;
+  role?: string;
+  isVerified?: string;
+  search?: string;
+};
+
 export const getUsers = asyncHandler(
-  async (_req: Request, res: Response) => {
-    const users = await userService.getAllUsers();
+  async (
+    req: Request<
+      {},
+      {},
+      {},
+      GetUsersQuery
+    >,
+    res: Response
+  ) => {
+   const users =
+  await userService.getAllUsers(
+    req.query.page
+      ? Number(req.query.page)
+      : undefined,
+
+    req.query.limit
+      ? Number(req.query.limit)
+      : undefined,
+
+    req.query.role,
+
+    req.query.isVerified,
+
+    req.query.search
+  );
 
     res.status(200).json({
       success: true,
-      data: users,
+      data: users.data,
+      meta: users.meta,
     });
   }
 );

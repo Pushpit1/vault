@@ -8,7 +8,9 @@ import {
 
 import app from "../../src/app";
 
-import { testUser } from "../fixtures/user.fixture";
+import { createTestUser } from "../fixtures/user.factory";
+
+const testUser = createTestUser();
 import { cleanupUser } from "../helpers/db.helper";
 import { registerUser } from "../helpers/user.helper";
 import { loginUser } from "../helpers/auth.helper";
@@ -18,9 +20,9 @@ describe("Admin Authorization", () => {
 
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-    await registerUser();
+await registerUser(testUser);
 
-    const login = await loginUser();
+const login = await loginUser(testUser);
     accessToken = login.body.data.accessToken;
   });
 

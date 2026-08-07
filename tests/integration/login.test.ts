@@ -8,11 +8,10 @@ import {
 
 import app from "../../src/app";
 import { prisma } from "../../src/config/prisma";
-import {
-  testUser,
-  invalidUser,
-} from "../fixtures/user.fixture";
+import { invalidUser } from "../fixtures/user.fixture";
+import { createTestUser } from "../fixtures/user.factory";
 
+const testUser = createTestUser();
 describe("User Login", () => {
   beforeAll(async () => {
     await prisma.user.deleteMany({

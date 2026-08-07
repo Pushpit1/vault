@@ -8,27 +8,31 @@ import {
 
 import app from "../../src/app";
 
-import { testUser } from "../fixtures/user.fixture";
+import { createTestUser } from "../fixtures/user.factory";
+
 import { cleanupUser } from "../helpers/db.helper";
 import { registerUser } from "../helpers/user.helper";
 import { loginUser } from "../helpers/auth.helper";
+const testUser = createTestUser();
 
 describe("Logout", () => {
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-    await registerUser();
+await registerUser(testUser);
   });
 
   it("should logout successfully", async () => {
-    const loginResponse =
-      await loginUser();
+    const login = await loginUser(testUser);
 
-    const cookies =
-      loginResponse.headers["set-cookie"];
+    const cookies = login.headers["set-cookie"];
 
-    const response = await request(app)
-      .post("/api/v1/users/logout")
-      .set("Cookie", cookies);
+if (!cookies) {
+  throw new Error("Refresh token cookie not found");
+}
+
+const response = await request(app)
+  .post("/api/v1/users/logout")
+  .set("Cookie", cookies);
 
     expect(response.status).toBe(200);
 

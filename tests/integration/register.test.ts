@@ -1,10 +1,11 @@
+import { createTestUser } from "../fixtures/user.factory";
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import app from "../../src/app";
 import { prisma } from "../../src/config/prisma";
 
-import { testUser } from "../fixtures/user.fixture";
+const testUser = createTestUser();
 
 describe("User Registration", () => {
   beforeAll(async () => {

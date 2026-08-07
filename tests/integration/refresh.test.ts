@@ -8,7 +8,9 @@ import {
 
 import app from "../../src/app";
 
-import { testUser } from "../fixtures/user.fixture";
+import { createTestUser } from "../fixtures/user.factory";
+
+const testUser = createTestUser();
 import { cleanupUser } from "../helpers/db.helper";
 import { registerUser } from "../helpers/user.helper";
 import { loginUser } from "../helpers/auth.helper";
@@ -16,12 +18,11 @@ import { loginUser } from "../helpers/auth.helper";
 describe("Refresh Token", () => {
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-    await registerUser();
-  });
+await registerUser(testUser);  });
 
   it("should generate a new access token", async () => {
     const loginResponse =
-      await loginUser();
+      await loginUser(testUser);
 
     const cookies =
       loginResponse.headers["set-cookie"];
