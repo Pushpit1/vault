@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { userService } from "../services/user.service";
+import {
+  successResponse,
+  paginatedResponse,
+} from "../utils/response";
 
 type GetUsersQuery = {
   page?: string;
@@ -42,11 +46,11 @@ export const getUsers = asyncHandler(
 
     req.query.order
   );
-    res.status(200).json({
-      success: true,
-      data: users.data,
-      meta: users.meta,
-    });
+   paginatedResponse(
+  res,
+  users.data,
+  users.meta
+);
   }
 );
 
@@ -56,10 +60,11 @@ export const createUser = asyncHandler(
       req.body
     );
 
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
+    successResponse(
+  res,
+  user,
+  201
+);
   }
 );
 
@@ -85,13 +90,9 @@ export const loginUser = asyncHandler(
       }
     );
 
-    res.status(200).json({
-      success: true,
-      data: {
-        accessToken:
-          result.accessToken,
-        user: result.user,
-      },
+    successResponse(res, {
+      accessToken: result.accessToken,
+      user: result.user,
     });
   }
 );
@@ -117,14 +118,9 @@ export const refreshToken = asyncHandler(
           7 * 24 * 60 * 60 * 1000,
       }
     );
-
-    res.status(200).json({
-      success: true,
-      data: {
-        accessToken:
-          result.accessToken,
-      },
-    });
+successResponse(res, {
+  accessToken: result.accessToken,
+});
   }
 );
 
@@ -146,11 +142,10 @@ export const logoutUser = asyncHandler(
         sameSite: "lax",
       }
     );
-
-    res.status(200).json({
-      success: true,
-      data: result,
-    });
+ successResponse(
+  res,
+  result
+);
   }
 );
 
@@ -172,10 +167,10 @@ export const changePassword =
           newPassword
         );
 
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
+      successResponse(
+  res,
+  result
+);
     }
   );
 
@@ -193,10 +188,10 @@ export const changePassword =
           email
         );
 
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
+      successResponse(
+  res,
+  result
+);
     }
   );
 
@@ -214,10 +209,10 @@ export const changePassword =
           email
         );
 
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
+      successResponse(
+  res,
+  result
+);
     }
   );
 
@@ -238,10 +233,10 @@ export const resetPassword =
           newPassword
         );
 
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
+    successResponse(
+  res,
+  result
+);
     }
   );
 
@@ -252,10 +247,10 @@ export const getProfile = asyncHandler(
         req.user.sub!
       );
 
-    res.status(200).json({
-      success: true,
-      data: user,
-    });
+  successResponse(
+  res,
+  user
+);
   }
 );
 
@@ -276,11 +271,11 @@ export const updateProfile =
           name,
           email
         );
+         successResponse(
+  res,
+  user
+);
 
-      res.status(200).json({
-        success: true,
-        data: user,
-      });
     }
   );
 
@@ -305,19 +300,16 @@ export const updateProfile =
           req.file.filename
         );
 
-      res.status(200).json({
-        success: true,
-        data: user,
-      });
+    successResponse(
+  res,
+  user
+);
     }
   );
-
 export const getAdminDashboard = asyncHandler(
   async (_req: Request, res: Response) => {
-    res.status(200).json({
-      success: true,
-      message:
-        "Welcome Admin!",
+   successResponse(res, {
+      message: "Welcome Admin!",
     });
   }
 );
