@@ -23,7 +23,7 @@ process.on("unhandledRejection", (reason) => {
 });
 
 app.listen(env.PORT, () => {
-  console.log(
-    `🚀 Vault Server running on http://localhost:${env.PORT}`
-  );
+  logger.info(
+  `Vault Server running on http://localhost:${env.PORT}`
+);
 });

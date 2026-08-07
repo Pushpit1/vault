@@ -7,8 +7,6 @@ export function generateAccessToken(
   email: string,
   role: Role
 ) {
-  console.log("Signing Access Secret:", env.JWT_SECRET);
-
   return jwt.sign(
     {
       sub: userId,
@@ -25,8 +23,6 @@ export function generateAccessToken(
 export function generateRefreshToken(
   userId: string
 ) {
-  console.log("Signing Refresh Secret:", env.JWT_SECRET);
-
   return jwt.sign(
     {
       sub: userId,
@@ -41,10 +37,6 @@ export function generateRefreshToken(
 export function verifyRefreshToken(
   token: string
 ) {
-  console.log("Verify Secret:", env.JWT_SECRET);
-  console.log("Token Length:", token.length);
-  console.log("Token:", JSON.stringify(token));
-
   return jwt.verify(
     token.trim(),
     env.JWT_SECRET

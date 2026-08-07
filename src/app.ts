@@ -22,7 +22,6 @@ app.use(requestId);
 app.use(requestLogger);
 app.use(express.json());
 
-console.log("Swagger route registered");
 app.use(
   "/docs",
   swaggerUi.serve,

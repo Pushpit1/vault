@@ -4,7 +4,7 @@
 
     "module": "CommonJS",
 
-    "rootDir": "./src",
+    "rootDir": ".",
 
     "outDir": "./dist",
 
@@ -20,7 +20,9 @@
   },
 
   "include": [
-    "src"
+    "src",
+    "tests",
+    "vitest.config.ts"
   ],
 
   "exclude": [

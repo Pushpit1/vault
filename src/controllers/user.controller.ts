@@ -130,7 +130,7 @@ export const changePassword =
 
       const result =
         await userService.changePassword(
-          req.user.sub,
+          req.user.sub!,
           currentPassword,
           newPassword
         );
@@ -212,7 +212,7 @@ export const getProfile = asyncHandler(
   async (req: Request, res: Response) => {
     const user =
       await userService.getProfile(
-        req.user.sub
+        req.user.sub!
       );
 
     res.status(200).json({
@@ -235,7 +235,7 @@ export const updateProfile =
 
       const user =
         await userService.updateProfile(
-          req.user.sub,
+          req.user.sub!,
           name,
           email
         );
@@ -264,7 +264,7 @@ export const updateProfile =
 
       const user =
         await userService.updateAvatar(
-          req.user.sub,
+          req.user.sub!,
           req.file.filename
         );
 
