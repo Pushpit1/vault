@@ -1,0 +1,41 @@
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:15:59"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:16:16"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:16:30"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:16:38"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:16:50"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:16:57"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:17:08"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:11"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:20"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:24"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:28"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:33"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:38"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:20:41"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:21:58"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:01"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:05"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:11"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:15"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:30"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:34"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:32:46"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:33:02"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:33:09"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:33:49"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:33:54"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:34:01"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 00:56:28"}
+{"duration":"7ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"92e24b53-4bc0-4303-a82b-7e4f37a34ca2","status":200,"timestamp":"2026-08-08 00:56:30","url":"/"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"aa128fc7-da80-4452-a05c-ad3fde86fcf0","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/"}
+{"duration":"29ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"dc3ac556-bfdb-4116-8b2d-e87c8e32de7e","status":200,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui.css"}
+{"duration":"24ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"0a00e35b-2bdd-4e54-8a51-fb42d34c931a","status":200,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-standalone-preset.js"}
+{"duration":"94ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"9949685e-facf-48e2-9e77-40e4ab3b3bd9","status":200,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-bundle.js"}
+{"duration":"5ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"af4ae941-ad5c-4967-b757-e33441344ef4","status":200,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-init.js"}
+{"duration":"2ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"829a3f8f-9ce4-4ac3-bab9-90e319888833","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/"}
+{"duration":"1ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"62d5bebf-8c4b-4943-86d9-891cecdfed03","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui.css"}
+{"duration":"0ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"6d71f7e2-4830-4ee7-8904-6f6e53f8280d","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-init.js"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"637b8fe9-62be-44c2-b31d-b2c797c57e8f","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-bundle.js"}
+{"duration":"5ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"c84bef6f-cad0-499f-9865-1364e558589f","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-standalone-preset.js"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"35f39887-a024-4477-a48c-133bd1bcaf50","status":200,"timestamp":"2026-08-08 00:56:45","url":"/api/v1/health"}
+{"duration":"1ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"8422c92f-4888-4beb-81b9-e7a008dd30b6","status":304,"timestamp":"2026-08-08 00:56:46","url":"/api/v1/health"}

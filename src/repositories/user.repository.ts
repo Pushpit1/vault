@@ -1,5 +1,5 @@
 import prisma from "../db/prisma";
-import { Prisma, User } from "../generated/prisma";
+import { Prisma, User } from "../generated/prisma/client";
 
 export const userRepository = {
   async findAll(

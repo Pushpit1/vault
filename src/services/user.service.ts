@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../generated/prisma/client";
 import { JwtPayload } from "jsonwebtoken";
 import { getPagination } from "../utils/pagination";
 import { userRepository } from "../repositories/user.repository";

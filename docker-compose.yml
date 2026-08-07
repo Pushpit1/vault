@@ -1,18 +1,38 @@
+
 services:
+  vault-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: vault-api:latest
+    container_name: vault-api
+
+    env_file:
+      - .env.docker
+
+    ports:
+      - "5000:5000"
+
+    depends_on:
+      postgres:
+        condition: service_started
+
+    restart: unless-stopped
+
   postgres:
     image: postgres:17
-
     container_name: vault-postgres
 
     restart: unless-stopped
 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: vault
+
     ports:
       - "5432:5432"
-
-    environment:
-      POSTGRES_USER: vault
-      POSTGRES_PASSWORD: vault123
-      POSTGRES_DB: vault
 
     volumes:
       - postgres-data:/var/lib/postgresql/data

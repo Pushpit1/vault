@@ -1,4 +1,5 @@
-import { Prisma, Role } from "../generated/prisma";
+import { Prisma } from "../generated/prisma/client";
+import { Role } from "../generated/prisma/enums";
 
 export interface UserFilterOptions {
   role?: string;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
-import { Role } from "../../generated/prisma";
+import { Role } from "../../generated/prisma/client";
 
 export function generateAccessToken(
   userId: string,
