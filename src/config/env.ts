@@ -1,7 +1,11 @@
 import dotenv from "dotenv";
 import { envSchema } from "./env.schema";
 
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "test"
+    ? ".env.test"
+    : ".env",
+});
 
 const parsed = envSchema.safeParse(process.env);
 
