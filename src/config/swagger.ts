@@ -35,7 +35,7 @@ const options: swaggerJSDoc.Options = {
   },
 
   apis: [
-    "./src/docs/*.ts",
+  "./src/docs/*.ts",
   ],
 };
 

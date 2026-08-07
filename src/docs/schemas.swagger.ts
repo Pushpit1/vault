@@ -2,7 +2,6 @@
  * @openapi
  * components:
  *   schemas:
- *
  *     User:
  *       type: object
  *       properties:
@@ -19,12 +18,20 @@
  *         role:
  *           type: string
  *           example: USER
+ *         avatar:
+ *           type: string
+ *           nullable: true
+ *           example: https://example.com/avatar.jpg
+ *         isVerified:
+ *           type: boolean
+ *           example: true
  *         createdAt:
  *           type: string
  *           format: date-time
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *
  *
  *     CreateUserRequest:
  *       type: object
