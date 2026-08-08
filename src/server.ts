@@ -1,8 +1,14 @@
 import "dotenv/config";
+
 import "./workers/email.worker";
+
 import app from "./app";
+
 import { env } from "./config/env";
 import redis from "./config/redis";
+
+import { storageService } from "./services/storage/storage.service";
+
 import { logger } from "./utils/logger/logger";
 
 process.on("uncaughtException", (error) => {
@@ -24,7 +30,11 @@ process.on("unhandledRejection", (reason) => {
 
 async function bootstrap() {
   try {
+    // Redis
     await redis.connect();
+
+    // MinIO
+    await storageService.initialize();
 
     const server = app.listen(env.PORT, () => {
       logger.info(
@@ -46,7 +56,10 @@ async function bootstrap() {
     process.on("SIGINT", shutdown);
     process.on("SIGTERM", shutdown);
   } catch (error) {
-    logger.error("Failed to start server", { error });
+    logger.error("Failed to start server", {
+      error,
+    });
+
     process.exit(1);
   }
 }

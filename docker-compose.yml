@@ -14,11 +14,15 @@ services:
 
     ports:
       - "5000:5000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
     depends_on:
       postgres:
         condition: service_started
       redis:
+        condition: service_started
+      minio:
         condition: service_started
 
     restart: unless-stopped
@@ -36,6 +40,8 @@ services:
       postgres:
         condition: service_started
       redis:
+        condition: service_started
+      minio:
         condition: service_started
 
     restart: unless-stopped
@@ -68,5 +74,25 @@ services:
 
     command: redis-server --appendonly yes
 
+  minio:
+    image: minio/minio:latest
+    container_name: vault-minio
+
+    restart: unless-stopped
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+
+    command: server /data --console-address ":9001"
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    volumes:
+      - minio-data:/data
+
 volumes:
   postgres-data:
+  minio-data:
