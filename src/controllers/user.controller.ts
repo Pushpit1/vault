@@ -5,7 +5,7 @@ import {
   successResponse,
   paginatedResponse,
 } from "../utils/response";
-
+import { cacheService } from "../services/cache/cache.service";
 type GetUsersQuery = {
   page?: string;
   limit?: string;
@@ -18,42 +18,34 @@ type GetUsersQuery = {
 
 export const getUsers = asyncHandler(
   async (
-    req: Request<
-      {},
-      {},
-      {},
-      GetUsersQuery
-    >,
+    req: Request<{}, {}, {}, GetUsersQuery>,
     res: Response
   ) => {
-   const users =
-  await userService.getAllUsers(
-    req.query.page
-      ? Number(req.query.page)
-      : undefined,
+    console.log("🚀 getUsers controller called");
 
-    req.query.limit
-      ? Number(req.query.limit)
-      : undefined,
+    const users = await userService.getAllUsers(
+      req.query.page
+        ? Number(req.query.page)
+        : undefined,
 
-    req.query.role,
+      req.query.limit
+        ? Number(req.query.limit)
+        : undefined,
 
-    req.query.isVerified,
+      req.query.role,
+      req.query.isVerified,
+      req.query.search,
+      req.query.sort,
+      req.query.order
+    );
 
-    req.query.search,
-
-    req.query.sort,
-
-    req.query.order
-  );
-   paginatedResponse(
-  res,
-  users.data,
-  users.meta
-);
+    paginatedResponse(
+      res,
+      users.data,
+      users.meta
+    );
   }
 );
-
 export const createUser = asyncHandler(
   async (req: Request, res: Response) => {
     const user = await userService.createUser(
@@ -65,6 +57,7 @@ export const createUser = asyncHandler(
   user,
   201
 );
+await cacheService.delByPattern("users:*");
   }
 );
 
@@ -275,6 +268,7 @@ export const updateProfile =
   res,
   user
 );
+await cacheService.delByPattern("users:*");
 
     }
   );

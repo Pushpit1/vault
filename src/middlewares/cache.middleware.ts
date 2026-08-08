@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import redis from "../config/redis";
+
+import { cacheService } from "../services/cache/cache.service";
+import { logger } from "../utils/logger/logger";
 
 const DEFAULT_TTL = 60;
 
@@ -17,25 +19,51 @@ export function cache(ttl = DEFAULT_TTL) {
         : `cache:${req.originalUrl}`;
 
     try {
-      const cached = await redis.get(key);
+      const cached = await cacheService.get(key);
 
       if (cached) {
-        return res.status(200).json(JSON.parse(cached));
+        logger.info("Cache HIT", {
+          key,
+          ttl,
+          method: req.method,
+        });
+
+        return res.status(200).json(cached);
       }
+
+      logger.info("Cache MISS", {
+        key,
+        ttl,
+        method: req.method,
+      });
 
       const originalJson = res.json.bind(res);
 
       res.json = (body: any) => {
-        redis
-          .setEx(key, ttl, JSON.stringify(body))
-          .catch(console.error);
+        logger.info("Cache STORE", {
+          key,
+          ttl,
+        });
+
+        cacheService
+          .set(key, body, ttl)
+          .catch((err) => {
+            logger.error("Cache Store Error", {
+              error: err,
+              key,
+            });
+          });
 
         return originalJson(body);
       };
 
       next();
     } catch (err) {
-      console.error("Redis Cache Error:", err);
+      logger.error("Redis Cache Error", {
+        error: err,
+        key,
+      });
+
       next();
     }
   };
