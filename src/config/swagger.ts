@@ -1,3 +1,4 @@
+import path from "path";
 import swaggerJSDoc from "swagger-jsdoc";
 
 const options: swaggerJSDoc.Options = {
@@ -6,17 +7,14 @@ const options: swaggerJSDoc.Options = {
     info: {
       title: "Vault API",
       version: "1.0.0",
-      description:
-        "Production-ready authentication backend",
+      description: "Production-ready authentication backend",
     },
-
     servers: [
       {
         url: "http://localhost:5000/api/v1",
         description: "Development Server",
       },
     ],
-
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -26,7 +24,6 @@ const options: swaggerJSDoc.Options = {
         },
       },
     },
-
     security: [
       {
         bearerAuth: [],
@@ -35,9 +32,8 @@ const options: swaggerJSDoc.Options = {
   },
 
   apis: [
-  "./src/docs/*.ts",
+    path.resolve(process.cwd(), "src/docs/*.swagger.ts"),
   ],
 };
 
-export const swaggerSpec =
-  swaggerJSDoc(options);
+export const swaggerSpec = swaggerJSDoc(options);

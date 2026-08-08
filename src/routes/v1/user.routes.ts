@@ -4,7 +4,7 @@ import { validate } from "../../middlewares/validate.middleware";
 import { authenticate } from "../../middlewares/auth.middleware";
 import { authorize } from "../../middlewares/authorize.middleware";
 import { upload } from "../../middlewares/upload.middleware";
-
+import { cache } from "../../middlewares/cache.middleware";
 import { emailService } from "../../services/email.service";
 
 import {
@@ -38,7 +38,7 @@ import {
 
 const router = Router();
 console.log("User routes loaded");
-router.get("/", getUsers);
+router.get("/", cache(60), getUsers);
 
 router.post(
   "/",
@@ -96,6 +96,7 @@ router.post(
 router.get(
   "/me",
   authenticate,
+  cache(60),
   getProfile
 );
 

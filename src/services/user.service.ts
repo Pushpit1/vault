@@ -9,7 +9,7 @@ import {
   comparePassword,
   hashPassword,
 } from "../utils/auth/password";
-
+import redis from "../config/redis";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -494,10 +494,17 @@ async updateProfile(
     updateData.isVerified = false;
   }
 
-  return userRepository.updateProfile(
+  const updatedUser =
+  await userRepository.updateProfile(
     userId,
     updateData
   );
+
+await redis.del(
+  `cache:/api/v1/users/me:${userId}`
+);
+
+return updatedUser;
 },
 
 async updateAvatar(
