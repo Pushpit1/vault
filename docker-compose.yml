@@ -10,8 +10,27 @@ services:
     env_file:
       - .env.docker
 
+    command: npm start
+
     ports:
       - "5000:5000"
+
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+
+    restart: unless-stopped
+
+  vault-worker:
+    image: vault-api:latest
+    container_name: vault-worker
+
+    env_file:
+      - .env.docker
+
+    command: npm run worker
 
     depends_on:
       postgres:
@@ -45,7 +64,7 @@ services:
     restart: unless-stopped
 
     expose:
-       - "6379"
+      - "6379"
 
     command: redis-server --appendonly yes
 
