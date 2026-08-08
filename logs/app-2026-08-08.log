@@ -39,3 +39,7 @@
 {"duration":"5ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"c84bef6f-cad0-499f-9865-1364e558589f","status":304,"timestamp":"2026-08-08 00:56:37","url":"/docs/swagger-ui-standalone-preset.js"}
 {"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"35f39887-a024-4477-a48c-133bd1bcaf50","status":200,"timestamp":"2026-08-08 00:56:45","url":"/api/v1/health"}
 {"duration":"1ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","requestId":"8422c92f-4888-4beb-81b9-e7a008dd30b6","status":304,"timestamp":"2026-08-08 00:56:46","url":"/api/v1/health"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 11:09:55"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 11:10:01"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 11:10:06"}
+{"level":"info","message":"Vault Server running on http://localhost:5000","timestamp":"2026-08-08 11:16:56"}

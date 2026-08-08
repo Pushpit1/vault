@@ -14,4 +14,6 @@ export const envSchema = z.object({
     .min(32, "JWT_SECRET must be at least 32 characters"),
 
   DATABASE_URL: z.url("Invalid DATABASE_URL"),
+  REDIS_URL: z.url("Invalid REDIS_URL"),
+
 });
