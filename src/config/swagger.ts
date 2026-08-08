@@ -3,18 +3,21 @@ import swaggerJSDoc from "swagger-jsdoc";
 
 const options: swaggerJSDoc.Options = {
   definition: {
-    openapi: "3.0.3",
+    openapi: "3.0.0",
+
     info: {
       title: "Vault API",
       version: "1.0.0",
-      description: "Production-ready authentication backend",
+      description:
+        "Vault API documentation",
     },
+
     servers: [
       {
-        url: "http://localhost:5000/api/v1",
-        description: "Development Server",
+        url: "http://localhost:5000",
       },
     ],
+
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -24,16 +27,15 @@ const options: swaggerJSDoc.Options = {
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
   },
 
   apis: [
-    path.resolve(process.cwd(), "src/docs/*.swagger.ts"),
+    path.resolve(
+      process.cwd(),
+      "src/docs/**/*.swagger.ts"
+    ),
   ],
 };
 
-export const swaggerSpec = swaggerJSDoc(options);
+export const swaggerSpec =
+  swaggerJSDoc(options);

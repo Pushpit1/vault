@@ -1,7 +1,6 @@
 /**
  * @openapi
- *
- * /users:
+ * /api/v1/users:
  *   post:
  *     tags:
  *       - Authentication
@@ -17,8 +16,11 @@
  *         description: User created successfully
  *       409:
  *         description: Email already exists
- *
- * /users/login:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/login:
  *   post:
  *     tags:
  *       - Authentication
@@ -34,8 +36,11 @@
  *         description: Login successful
  *       401:
  *         description: Invalid email or password
- *
- * /users/refresh:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/refresh:
  *   post:
  *     tags:
  *       - Authentication
@@ -51,8 +56,11 @@
  *         description: New access token generated
  *       401:
  *         description: Invalid refresh token
- *
- * /users/logout:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/logout:
  *   post:
  *     tags:
  *       - Authentication
@@ -66,8 +74,7 @@
 
 /**
  * @openapi
- *
- * /users/change-password:
+ * /api/v1/users/change-password:
  *   post:
  *     tags:
  *       - Authentication
@@ -85,8 +92,11 @@
  *         description: Password changed successfully
  *       401:
  *         description: Current password is incorrect
- *
- * /users/forgot-password:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/forgot-password:
  *   post:
  *     tags:
  *       - Authentication
@@ -102,8 +112,11 @@
  *         description: Password reset email sent
  *       404:
  *         description: User not found
- *
- * /users/reset-password:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/reset-password:
  *   post:
  *     tags:
  *       - Authentication
@@ -119,8 +132,11 @@
  *         description: Password reset successful
  *       401:
  *         description: Invalid or expired token
- *
- * /users/verify-email:
+ */
+
+/**
+ * @openapi
+ * /api/v1/users/verify-email:
  *   post:
  *     tags:
  *       - Authentication
@@ -137,4 +153,5 @@
  *       404:
  *         description: User not found
  */
+
 export {};

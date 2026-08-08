@@ -1,6 +1,6 @@
 /**
  * @openapi
- * /users:
+ * /api/v1/users:
  *   get:
  *     tags:
  *       - Users
@@ -15,70 +15,57 @@
  *           type: integer
  *           default: 1
  *         description: Page number.
+ *
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
  *         description: Number of users per page.
+ *
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
  *           enum: [USER, ADMIN]
  *         description: Filter users by role.
+ *
  *       - in: query
  *         name: isVerified
  *         schema:
  *           type: boolean
  *         description: Filter verified or unverified users.
+ *
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
  *         description: Search users by name or email.
+ *
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
  *           enum: [name, email, role, createdAt, updatedAt]
  *         description: Sort field.
+ *
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *         description: Sort order.
+ *
  *     responses:
  *       200:
  *         description: Users retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/User'
- *                 meta:
- *                   type: object
- *                   properties:
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
- *                     total:
- *                       type: integer
- *                     totalPages:
- *                       type: integer
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
  * @openapi
- * /users/me:
+ * /api/v1/users/me:
  *   get:
  *     tags:
  *       - Users
@@ -88,11 +75,13 @@
  *     responses:
  *       200:
  *         description: Success
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
  * @openapi
- * /users/me:
+ * /api/v1/users/me:
  *   patch:
  *     tags:
  *       - Users
@@ -108,11 +97,13 @@
  *     responses:
  *       200:
  *         description: Success
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
  * @openapi
- * /users/admin:
+ * /api/v1/users/admin:
  *   get:
  *     tags:
  *       - Admin
@@ -122,11 +113,15 @@
  *     responses:
  *       200:
  *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
  */
 
 /**
  * @openapi
- * /users/me/avatar:
+ * /api/v1/users/me/avatar:
  *   patch:
  *     tags:
  *       - Users
@@ -146,11 +141,13 @@
  *     responses:
  *       200:
  *         description: Avatar uploaded successfully
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
  * @openapi
- * /users/test:
+ * /api/v1/users/test:
  *   get:
  *     tags:
  *       - Development
