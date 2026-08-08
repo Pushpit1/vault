@@ -8,18 +8,44 @@ datasource db {
 }
 
 model User {
-  id                      String                   @id @default(cuid())
-  email                   String                   @unique
-  password                String
-  name                    String
-  createdAt               DateTime                 @default(now())
-  updatedAt               DateTime                 @updatedAt
-  role                    Role                     @default(USER)
-  isVerified              Boolean                  @default(false)
-  avatar                  String?
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  role       Role     @default(USER)
+  isVerified Boolean  @default(false)
+  avatar     String?
+
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
   refreshTokens           RefreshToken[]
+
+  files File[]
+}
+
+model File {
+  id String @id @default(cuid())
+
+  originalName String
+  objectKey    String @unique
+  bucket       String
+
+  mimeType  String
+  extension String
+
+  size BigInt
+
+  provider String @default("minio")
+
+  isPublic Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 model RefreshToken {
@@ -28,7 +54,8 @@ model RefreshToken {
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {
@@ -37,7 +64,8 @@ model PasswordResetToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model EmailVerificationToken {
@@ -46,7 +74,8 @@ model EmailVerificationToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
