@@ -148,4 +148,17 @@
  *         description: Avatar uploaded successfully
  */
 
+/**
+ * @openapi
+ * /users/test:
+ *   get:
+ *     tags:
+ *       - Development
+ *     summary: Test user routes
+ *     description: Development endpoint to verify user routing.
+ *     responses:
+ *       200:
+ *         description: User routes are working
+ */
+
 export {};

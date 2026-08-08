@@ -5,6 +5,7 @@ import { userRepository } from "../repositories/user.repository";
 import { buildUserFilter } from "../utils/filter";
 import { refreshTokenRepository } from "../repositories/refreshToken.repository";
 import { buildUserSorting } from "../utils/sorting";
+import { emailQueue } from "../queues/email.queue";
 import {
   comparePassword,
   hashPassword,
@@ -383,9 +384,12 @@ async generateEmailVerification(
     expiresAt
   );
 
-  await emailService.sendVerificationEmail(
-  user.email,
-  token
+  await emailQueue.add(
+  "verification-email",
+  {
+    email: user.email,
+    token,
+  }
 );
 
 return {

@@ -1,5 +1,5 @@
 import "dotenv/config";
-
+import "./workers/email.worker";
 import app from "./app";
 import { env } from "./config/env";
 import redis from "./config/redis";
