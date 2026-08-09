@@ -6,6 +6,7 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+
 COPY package*.json ./
 
 RUN npm install
@@ -33,16 +34,13 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-
-# Prisma generated client
 COPY --from=builder /app/src/generated ./src/generated
-
-# ✅ Swagger source files
 COPY --from=builder /app/src/docs ./src/docs
-
 COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
 
 RUN chmod +x docker-entrypoint.sh
+RUN mkdir -p /app/logs && chown -R node:node /app
+USER node
 
 EXPOSE 5000
 
