@@ -13,6 +13,9 @@ import { corsMiddleware } from "./config/cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import { serverAdapter } from "./config/bull-board/bullBoard";
+
+import metricsRoutes from "./routes/metrics.routes";
+
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet());
@@ -32,7 +35,7 @@ app.use(
 app.get("/", (_req, res) => {
   res.send("Vault API is running 🚀");
 });
-
+app.use("/metrics", metricsRoutes);
 app.use("/api/v1", apiV1Routes);
 
 app.use(
