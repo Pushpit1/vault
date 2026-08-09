@@ -43,11 +43,6 @@ jobs:
         ports:
           - 9000:9000
           - 9001:9001
-        options: >-
-          --health-cmd "mc ready local"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
         command: server /data --console-address ":9001"
 
     env:
@@ -61,16 +56,16 @@ jobs:
       MINIO_SECRET_KEY: minioadmin123
       MINIO_BUCKET: vault
       MINIO_USE_SSL: "false"
-      JWT_SECRET: test-secret-key
+      JWT_SECRET: test-secret-key-for-ci
       APP_URL: http://localhost:5000
       RATE_LIMIT_TEST: "false"
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
