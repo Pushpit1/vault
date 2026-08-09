@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma";
+import { hashRefreshToken } from "../utils/jwt/refresh-token-hash";
 
 export const refreshTokenRepository = {
   async create(
@@ -8,19 +9,17 @@ export const refreshTokenRepository = {
   ) {
     return prisma.refreshToken.create({
       data: {
-        token,
+        token: hashRefreshToken(token),
         userId,
         expiresAt,
       },
     });
   },
 
-  async findByToken(
-    token: string
-  ) {
+  async findByToken(token: string) {
     return prisma.refreshToken.findUnique({
       where: {
-        token,
+        token: hashRefreshToken(token),
       },
       include: {
         user: true,
@@ -28,19 +27,15 @@ export const refreshTokenRepository = {
     });
   },
 
-  async delete(
-    token: string
-  ) {
+  async delete(token: string) {
     return prisma.refreshToken.delete({
       where: {
-        token,
+        token: hashRefreshToken(token),
       },
     });
   },
 
-  async deleteAllByUser(
-    userId: string
-  ) {
+  async deleteAllByUser(userId: string) {
     return prisma.refreshToken.deleteMany({
       where: {
         userId,
@@ -48,16 +43,14 @@ export const refreshTokenRepository = {
     });
   },
 
-  async exists(
-    token: string
-  ) {
+  async exists(token: string) {
     const refreshToken =
       await prisma.refreshToken.findUnique({
         where: {
-          token,
+          token: hashRefreshToken(token),
         },
       });
 
     return !!refreshToken;
-  }
+  },
 };

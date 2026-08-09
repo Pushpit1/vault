@@ -1,4 +1,3 @@
-
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 
@@ -7,6 +6,7 @@ import helmet from "helmet";
 import apiV1Routes from "./routes/v1";
 import { requestLogger } from "./middlewares/logger.middleware";
 import { requestId } from "./middlewares/requestId.middleware";
+import { metricsMiddleware } from "./middlewares/metrics.middleware";
 import { notFound } from "./middlewares/notFound.middleware";
 import { errorHandler } from "./middlewares/error.middleware";
 import { corsMiddleware } from "./config/cors";
@@ -17,13 +17,18 @@ import { serverAdapter } from "./config/bull-board/bullBoard";
 import metricsRoutes from "./routes/metrics.routes";
 
 const app = express();
+
 app.set("trust proxy", 1);
+
 app.use(helmet());
 app.use(corsMiddleware);
 app.use(compression());
 app.use(cookieParser());
+
 app.use(requestId);
+app.use(metricsMiddleware);
 app.use(requestLogger);
+
 app.use(express.json());
 
 app.use(
@@ -33,9 +38,11 @@ app.use(
 );
 
 app.get("/", (_req, res) => {
-  res.send("Vault API is running 🚀");
+  res.send("Vault API is running ??");
 });
+
 app.use("/metrics", metricsRoutes);
+
 app.use("/api/v1", apiV1Routes);
 
 app.use(

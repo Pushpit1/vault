@@ -1,9 +1,16 @@
-import client from "prom-client";
+import {
+  collectDefaultMetrics,
+  Counter,
+  Histogram,
+  register,
+} from "prom-client";
 
-client.collectDefaultMetrics();
+collectDefaultMetrics({
+  prefix: "vault_",
+});
 
 export const httpRequestsTotal =
-  new client.Counter({
+  new Counter({
     name: "vault_http_requests_total",
     help: "Total number of HTTP requests",
     labelNames: [
@@ -14,7 +21,7 @@ export const httpRequestsTotal =
   });
 
 export const httpRequestDuration =
-  new client.Histogram({
+  new Histogram({
     name: "vault_http_request_duration_seconds",
     help: "HTTP request duration in seconds",
     labelNames: [
@@ -31,10 +38,9 @@ export const httpRequestDuration =
       0.25,
       0.5,
       1,
-      2,
+      2.5,
       5,
     ],
   });
 
-export const register =
-  client.register;
+export { register };

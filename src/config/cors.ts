@@ -1,6 +1,7 @@
 import cors from "cors";
+import { env } from "./env";
 
 export const corsMiddleware = cors({
-  origin: ["http://localhost:5173"],
+  origin: env.APP_URL,
   credentials: true,
 });

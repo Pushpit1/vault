@@ -7,6 +7,10 @@ import { upload } from "../../middlewares/upload.middleware";
 import { cache } from "../../middlewares/cache.middleware";
 import { emailService } from "../../services/email.service";
 import { cacheResponse } from "../../middlewares/cacheResponse.middleware";
+import {
+  authRateLimit,
+  sensitiveActionRateLimit,
+} from "../../middlewares/rateLimit.middleware";
 
 import {
   loginSchema,
@@ -60,36 +64,35 @@ router.post(
 
 router.post(
   "/forgot-password",
-  validate(
-    forgotPasswordSchema
-  ),
+  sensitiveActionRateLimit,
+  validate(forgotPasswordSchema),
   forgotPassword
 );
 
 router.post(
   "/verify-email",
-  validate(
-    emailVerificationSchema
-  ),
+  sensitiveActionRateLimit,
+  validate(emailVerificationSchema),
   generateEmailVerification
 );
 
 router.post(
   "/reset-password",
-  validate(
-    resetPasswordSchema
-  ),
+  sensitiveActionRateLimit,
+  validate(resetPasswordSchema),
   resetPassword
 );
 
 router.post(
   "/login",
+  authRateLimit,
   validate(loginSchema),
   loginUser
 );
 
 router.post(
   "/refresh",
+  authRateLimit,
   refreshToken
 );
 
@@ -151,3 +154,4 @@ router.get("/test", (_req, res) => {
 });
 
 export default router;
+

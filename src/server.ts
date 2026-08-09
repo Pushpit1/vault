@@ -5,8 +5,7 @@ import "./workers/email.worker";
 import app from "./app";
 
 import { env } from "./config/env";
-import redis from "./config/redis";
-
+import redis, { connectRedis } from "./config/redis";
 import { storageService } from "./services/storage/storage.service";
 
 import { logger } from "./utils/logger/logger";
@@ -31,8 +30,7 @@ process.on("unhandledRejection", (reason) => {
 async function bootstrap() {
   try {
     // Redis
-    await redis.connect();
-
+await connectRedis();
     // MinIO
     await storageService.initialize();
 
@@ -56,9 +54,12 @@ async function bootstrap() {
     process.on("SIGINT", shutdown);
     process.on("SIGTERM", shutdown);
   } catch (error) {
-    logger.error("Failed to start server", {
-      error,
-    });
+    console.error("FAILED TO START SERVER:", error);
+
+    if (error instanceof Error) {
+      console.error("MESSAGE:", error.message);
+      console.error("STACK:", error.stack);
+    }
 
     process.exit(1);
   }

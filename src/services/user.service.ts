@@ -183,6 +183,14 @@ export const userService = {
       );
     }
 
+if (storedToken.expiresAt <= new Date()) {
+  await refreshTokenRepository.delete(refreshToken);
+
+  throw new UnauthorizedError(
+    "Invalid refresh token"
+  );
+}
+
     if (
       storedToken.user.id !==
       payload.sub
