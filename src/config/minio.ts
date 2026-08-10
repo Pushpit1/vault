@@ -12,49 +12,40 @@ const bucket =
 /*
  * Internal MinIO client.
  *
- * Used by the API container to actually
- * upload/download/delete objects.
- *
- * Docker can resolve "minio".
+ * Used by the API container to upload,
+ * download, delete, and inspect objects.
  */
-export const minioClient = new Client({
-  endPoint:
-    process.env.MINIO_ENDPOINT!,
-  port:
-    Number(process.env.MINIO_PORT),
-  useSSL:
-    process.env.MINIO_USE_SSL === "true",
-  accessKey,
-  secretKey,
-  region: "us-east-1",
-});
-
-/*
- * Public MinIO client.
- *
- * IMPORTANT:
- * The browser needs localhost:9000 in the
- * signed URL.
- *
- * We therefore sign the URL using
- * localhost:9000 from the beginning.
- *
- * region is explicitly supplied so the SDK
- * does not need to contact MinIO to discover
- * the bucket region.
- */
-export const minioPublicClient =
+export const minioClient =
   new Client({
-    endPoint: "localhost",
-    port: 9000,
-    useSSL: false,
+    endPoint:
+      process.env.MINIO_ENDPOINT!,
+    port:
+      Number(process.env.MINIO_PORT),
+    useSSL:
+      process.env.MINIO_USE_SSL === "true",
     accessKey,
     secretKey,
     region: "us-east-1",
   });
 
-export const BUCKET_NAME = bucket;
+/*
+ * Public signing client.
+ *
+ * This endpoint is served by Nginx and
+ * proxied to the private MinIO instance.
+ */
+export const minioPublicClient =
+  new Client({
+    endPoint:
+      process.env.MINIO_PUBLIC_ENDPOINT!,
+    port:
+      Number(process.env.MINIO_PUBLIC_PORT),
+    useSSL:
+      process.env.MINIO_PUBLIC_USE_SSL === "true",
+    accessKey,
+    secretKey,
+    region: "us-east-1",
+  });
 
-export const MINIO_PUBLIC_URL =
-  process.env.MINIO_PUBLIC_URL ||
-  "http://localhost:9000";
+export const BUCKET_NAME =
+  bucket;
