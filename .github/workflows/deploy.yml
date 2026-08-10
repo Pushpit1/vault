@@ -1,4 +1,4 @@
-﻿name: Vault CD
+name: Vault CD
 
 on:
   workflow_run:
@@ -14,8 +14,8 @@ jobs:
   deploy:
     if: >
       ${{ github.event_name == 'workflow_dispatch' ||
-          (github.event.workflow_run.conclusion == 'success' &&
-           github.event.workflow_run.event == 'push') }}
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push') }}
 
     runs-on: ubuntu-latest
 
