@@ -9,4 +9,3 @@ dist/
 /src/generated/prisma/
 logs/
 
-.env.docker
