@@ -1,32 +1,42 @@
-name: Deploy to GCP
+name: Vault CD
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Vault CI"]
+    types:
+      - completed
     branches:
       - main
 
 jobs:
   deploy:
+    if: >
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push' }}
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to GCP VM
+      - name: Deploy to GCP
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
+            set -e
+
             cd ~/vault
 
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
-            docker compose build vault-api
+            docker compose --env-file .env.docker build vault-api
 
-            docker compose up -d vault-api vault-worker
+            docker compose --env-file .env.docker up -d vault-api vault-worker
 
             sleep 20
 
             docker compose ps
 
-            curl -f http://localhost:5000/api/v1/health/ready
+            curl -fsS http://localhost:5000/api/v1/health/ready
