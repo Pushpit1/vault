@@ -1,4 +1,4 @@
-name: Vault CD
+﻿name: Vault CD
 
 on:
   workflow_run:
@@ -35,11 +35,11 @@ jobs:
 
             cp /tmp/vault.env.docker .env.docker
 
-            docker compose --env-file .env.docker build vault-api
-            docker compose --env-file .env.docker up -d vault-api vault-worker
+                        docker compose --env-file .env.docker build vault-api
+                        docker compose --env-file .env.docker up -d vault-api vault-worker
 
             sleep 20
 
             docker compose ps
 
-            curl -fsS http://localhost:5000/api/v1/health/ready
+                        curl -fsS http://localhost:5000/api/v1/health/ready
