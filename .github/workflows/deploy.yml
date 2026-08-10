@@ -8,11 +8,14 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
 jobs:
   deploy:
     if: >
-      ${{ github.event.workflow_run.conclusion == 'success' &&
-          github.event.workflow_run.event == 'push' }}
+      ${{ github.event_name == 'workflow_dispatch' ||
+          (github.event.workflow_run.conclusion == 'success' &&
+           github.event.workflow_run.event == 'push') }}
 
     runs-on: ubuntu-latest
 
@@ -35,11 +38,21 @@ jobs:
 
             cp /tmp/vault.env.docker .env.docker
 
-                        docker compose --env-file .env.docker build vault-api
-                        docker compose --env-file .env.docker up -d vault-api vault-worker
+            docker compose --env-file .env.docker build vault-api
+            docker compose --env-file .env.docker up -d vault-api vault-worker
 
-            sleep 20
+            for i in {1..12}; do
+              if curl -fsS http://localhost:5000/api/v1/health/ready; then
+                echo
+                echo "API readiness check passed"
+                exit 0
+              fi
 
+              echo "API not ready yet... attempt $i/12"
+              sleep 5
+            done
+
+            echo "API failed to become ready"
             docker compose ps
-
-                        curl -fsS http://localhost:5000/api/v1/health/ready
+            docker logs vault-api --tail 100
+            exit 1
