@@ -47,7 +47,7 @@ export const downloadFile =
         req.params.id as string;
 
       const result =
-        await fileService.download(id);
+        await fileService.download(id, (req as any).user.sub);
 
       res.setHeader(
         "Content-Type",
@@ -73,7 +73,7 @@ export const deleteFile =
         req.params.id as string;
 
       const result =
-        await fileService.delete(id);
+        await fileService.delete(id, (req as any).user.sub);
 
       successResponse(
         res,
