@@ -1,4 +1,3 @@
-@'
 # Vault
 
 Production-inspired distributed object storage platform built with Node.js, TypeScript, and Express.
@@ -21,24 +20,30 @@ Production-inspired distributed object storage platform built with Node.js, Type
 ## Architecture
 
 ```text
-Internet
-    |
-    v
-Vault API :5000
-    |
-    +----------+----------+
-    |          |          |
-    v          v          v
-PostgreSQL   Redis      MinIO
- :5432       :6379      :9000
+                    Internet
+                       |
+                       v
+                 Vault API :5000
+                       |
+          +------------+------------+
+          |            |            |
+          v            v            v
+      PostgreSQL      Redis        MinIO
+       :5432          :6379        :9000
+          |
+          v
+       Persistent
+         Data
 
-Vault Worker
-    |
-    v
-Internal Services
+                  Vault Worker
+                       |
+                       v
+                Internal Services
 
-Prometheus --> Grafana
-
+              Prometheus
+                   |
+                   v
+                Grafana
 
 ## Current Capabilities
 
@@ -120,4 +125,3 @@ The current system includes:
 - CI/CD
 - Production health checks
 - Security hardening
-
