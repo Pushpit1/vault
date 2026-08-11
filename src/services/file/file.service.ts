@@ -33,11 +33,11 @@ export const fileService = {
     });
   },
 
-  async download(id: string) {
+  async download(id: string, ownerId: string) {
     const file =
       await fileRepository.findById(id);
 
-    if (!file) {
+    if (!file || file.ownerId !== ownerId) {
       throw new Error("File not found");
     }
 
@@ -52,11 +52,11 @@ export const fileService = {
     };
   },
 
-  async delete(id: string) {
+  async delete(id: string, ownerId: string) {
     const file =
       await fileRepository.findById(id);
 
-    if (!file) {
+    if (!file || file.ownerId !== ownerId) {
       throw new Error("File not found");
     }
 
