@@ -64,7 +64,7 @@ jobs:
           --health-retries 5
 
       minio:
-        image: minio/minio:latest
+        image: cgr.dev/chainguard/minio:latest
         env:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin123
@@ -111,6 +111,18 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Verify MinIO readiness and initialize bucket
+        run: |
+          for i in $(seq 1 30); do
+            if curl -s -f http://localhost:9000/minio/health/ready; then
+              echo "MinIO is ready"
+              break
+            fi
+            echo "Waiting for MinIO to be ready..."
+            sleep 1
+          done
+          node -e "const { minioClient, BUCKET_NAME } = require('./dist/config/minio.js'); minioClient.bucketExists(BUCKET_NAME).then(exists => exists ? null : minioClient.makeBucket(BUCKET_NAME, 'us-east-1')).then(() => console.log('MinIO bucket verified/created: ' + BUCKET_NAME)).catch(err => { console.error('Failed to initialize MinIO bucket:', err); process.exit(1); });"
 
       - name: Run tests
         run: npm test

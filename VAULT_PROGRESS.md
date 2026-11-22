@@ -90,4 +90,6 @@ All blocking regressions, code cleanups, test alignments, and review findings ha
 | `f06381a` | `ci: add lint and typecheck stage and clean workflow bom` | Added type check job in CI, removed UTF-8 BOM from deploy.yml |
 | `af1278b` | `docs: add audit report, implementation plan and progress tracker` | Audit report, implementation roadmap, progress tracker |
 | `c56a9a8` | `docs: record commit hashes and verification record in progress tracker` | Progress tracker update with verified commit history |
+| `24bd61e` | `ci: configure dummy DATABASE_URL for Prisma generate in CI typecheck` | Dummy PostgreSQL connection URL for lint-and-typecheck Prisma generation |
+| `2d07aca` | `ci: use Chainguard MinIO drop-in image and verify readiness in CI` | Drop-in OCI MinIO container and readiness/bucket initialization in CI |
 
