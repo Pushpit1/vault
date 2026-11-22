@@ -3,54 +3,40 @@ import { Prisma, User } from "../generated/prisma/client";
 
 export const userRepository = {
   async findAll(
-  skip: number,
-  take: number,
-  where: Prisma.UserWhereInput,
-  orderBy: Prisma.UserOrderByWithRelationInput
-) {
-    const [users, total] =
-      await prisma.$transaction([
-       prisma.user.findMany({
-  skip,
-  take,
-  where,
-  orderBy,
-  select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            isVerified: true,
-            avatar: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        }),
-
-        prisma.user.count({
-          where,
-        }),
-      ]);
-
-    return {
-      users,
-      total,
-    };
-  },
-
-  async findByEmail(
-    email: string
-  ): Promise<User | null> {
-    return prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-  },
-
-  async create(
-    data: Prisma.UserCreateInput
+    skip: number,
+    take: number,
+    where: Prisma.UserWhereInput,
+    orderBy: Prisma.UserOrderByWithRelationInput
   ) {
+    const [users, total] = await prisma.$transaction([
+      prisma.user.findMany({
+        skip,
+        take,
+        where,
+        orderBy,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isVerified: true,
+          avatar: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+
+      prisma.user.count({ where }),
+    ]);
+
+    return { users, total };
+  },
+
+  async findByEmail(email: string): Promise<User | null> {
+    return prisma.user.findUnique({ where: { email } });
+  },
+
+  async create(data: Prisma.UserCreateInput) {
     return prisma.user.create({
       data,
       select: {
@@ -67,18 +53,12 @@ export const userRepository = {
   },
 
   async findById(id: string) {
-    return prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    return prisma.user.findUnique({ where: { id } });
   },
 
   async findPublicById(id: string) {
     return prisma.user.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       select: {
         id: true,
         name: true,
@@ -92,17 +72,17 @@ export const userRepository = {
     });
   },
 
-  async updatePassword(
-    userId: string,
-    password: string
-  ) {
+  async updatePassword(userId: string, password: string) {
     return prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        password,
-      },
+      where: { id: userId },
+      data: { password },
+    });
+  },
+
+  async updateVerificationStatus(userId: string, isVerified: boolean) {
+    return prisma.user.update({
+      where: { id: userId },
+      data: { isVerified },
     });
   },
 
@@ -115,9 +95,7 @@ export const userRepository = {
     }
   ) {
     return prisma.user.update({
-      where: {
-        id,
-      },
+      where: { id },
       data,
       select: {
         id: true,
@@ -132,17 +110,10 @@ export const userRepository = {
     });
   },
 
-  async updateAvatar(
-    userId: string,
-    avatar: string
-  ) {
+  async updateAvatar(userId: string, avatar: string) {
     return prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        avatar,
-      },
+      where: { id: userId },
+      data: { avatar },
       select: {
         id: true,
         name: true,
@@ -154,5 +125,9 @@ export const userRepository = {
         updatedAt: true,
       },
     });
+  },
+
+  async count(where: Prisma.UserWhereInput) {
+    return prisma.user.count({ where });
   },
 };

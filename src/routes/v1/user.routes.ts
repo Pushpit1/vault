@@ -3,10 +3,8 @@ import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware";
 import { authenticate } from "../../middlewares/auth.middleware";
 import { authorize } from "../../middlewares/authorize.middleware";
-import { upload } from "../../middlewares/upload.middleware";
+import { avatarUpload } from "../../middlewares/upload.middleware";
 import { cache } from "../../middlewares/cache.middleware";
-import { emailService } from "../../services/email.service";
-import { cacheResponse } from "../../middlewares/cacheResponse.middleware";
 import {
   authRateLimit,
   sensitiveActionRateLimit,
@@ -17,7 +15,8 @@ import {
   changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  emailVerificationSchema ,
+  emailVerificationSchema,
+  verifyEmailSchema,
 } from "../../validators/auth.validator";
 
 import {
@@ -36,51 +35,21 @@ import {
   resetPassword,
   getProfile,
   getAdminDashboard,
-  generateEmailVerification ,
-  updateProfile ,
-  updateAvatar
+  generateEmailVerification,
+  verifyEmail,
+  updateProfile,
+  updateAvatar,
 } from "../../controllers/user.controller";
 
 const router = Router();
-console.log("User routes loaded");
-router.get(
-  "/",
-  cacheResponse(300),
-  getUsers
-);
+
+// ─── Public Auth Routes ──────────────────────────────────────────────────────
 
 router.post(
   "/",
+  authRateLimit,
   validate(createUserSchema),
   createUser
-);
-
-router.post(
-  "/change-password",
-  authenticate,
-  validate(changePasswordSchema),
-  changePassword
-);
-
-router.post(
-  "/forgot-password",
-  sensitiveActionRateLimit,
-  validate(forgotPasswordSchema),
-  forgotPassword
-);
-
-router.post(
-  "/verify-email",
-  sensitiveActionRateLimit,
-  validate(emailVerificationSchema),
-  generateEmailVerification
-);
-
-router.post(
-  "/reset-password",
-  sensitiveActionRateLimit,
-  validate(resetPasswordSchema),
-  resetPassword
 );
 
 router.post(
@@ -92,13 +61,51 @@ router.post(
 
 router.post(
   "/refresh",
-  authRateLimit,
   refreshToken
 );
 
 router.post(
   "/logout",
   logoutUser
+);
+
+router.post(
+  "/forgot-password",
+  sensitiveActionRateLimit,
+  validate(forgotPasswordSchema),
+  forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  sensitiveActionRateLimit,
+  validate(resetPasswordSchema),
+  resetPassword
+);
+
+// ─── Email Verification ───────────────────────────────────────────────────────
+
+router.post(
+  "/verify-email",
+  sensitiveActionRateLimit,
+  validate(emailVerificationSchema),
+  generateEmailVerification
+);
+
+router.get(
+  "/verify-email",
+  validate(verifyEmailSchema),
+  verifyEmail
+);
+
+// ─── Authenticated User Routes ────────────────────────────────────────────────
+
+router.post(
+  "/change-password",
+  authenticate,
+  sensitiveActionRateLimit,
+  validate(changePasswordSchema),
+  changePassword
 );
 
 router.get(
@@ -111,17 +118,24 @@ router.get(
 router.patch(
   "/me",
   authenticate,
-  validate(
-    updateProfileSchema
-  ),
+  validate(updateProfileSchema),
   updateProfile
 );
 
 router.patch(
   "/me/avatar",
   authenticate,
-  upload.single("avatar"),
+  avatarUpload.single("avatar"),
   updateAvatar
+);
+
+// ─── Admin Routes ─────────────────────────────────────────────────────────────
+
+router.get(
+  "/",
+  authenticate,
+  authorize("ADMIN"),
+  getUsers
 );
 
 router.get(
@@ -131,27 +145,4 @@ router.get(
   getAdminDashboard
 );
 
-router.get(
-  "/test-email",
-  async (_req, res) => {
-    await emailService.sendVerificationEmail(
-      "YOUR_EMAIL@gmail.com",
-      "test-token-123"
-    );
-
-    res.json({
-      success: true,
-      message: "Email sent!",
-    });
-  }
-);
-
-router.get("/test", (_req, res) => {
-  res.json({
-    success: true,
-    message: "User routes working",
-  });
-});
-
 export default router;
-

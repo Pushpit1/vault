@@ -13,6 +13,7 @@ import { corsMiddleware } from "./config/cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import { serverAdapter } from "./config/bull-board/bullBoard";
+import { adminBoardAuth } from "./middlewares/adminBoardAuth.middleware";
 
 import metricsRoutes from "./routes/metrics.routes";
 
@@ -29,7 +30,8 @@ app.use(requestId);
 app.use(metricsMiddleware);
 app.use(requestLogger);
 
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
 app.use(
   "/docs",
@@ -38,15 +40,23 @@ app.use(
 );
 
 app.get("/", (_req, res) => {
-  res.send("Vault API is running ??");
+  res.json({
+    name: "Vault API",
+    version: "1.0.0",
+    status: "running",
+    docs: "/docs",
+    health: "/api/v1/health/ready",
+  });
 });
 
 app.use("/metrics", metricsRoutes);
 
 app.use("/api/v1", apiV1Routes);
 
+// Bull Board queue admin — browser and API compatible admin authentication
 app.use(
   "/admin/queues",
+  adminBoardAuth,
   serverAdapter.getRouter()
 );
 
