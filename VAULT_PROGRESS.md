@@ -74,3 +74,18 @@ All blocking regressions, code cleanups, test alignments, and review findings ha
 | `src/app.ts` | Mounted `adminBoardAuth` on `/admin/queues`, added payload limits |
 | `tests/setup.ts` | Resilient test environment setup |
 | `logs/` | Restored original files, removed temporary 0-byte artifacts |
+
+---
+
+## 📝 Commits (on branch `feature/vault-production-upgrade`)
+
+| Hash | Message | Scope |
+|---|---|---|
+| `725aa8b` | `security: harden endpoints, rate limiting and browser admin auth` | Restricted user listing, rate limits, browser-compatible Bull Board auth |
+| `8b5270a` | `fix: align password validation and minio bucket configuration` | Dual MINIO_BUCKET compatibility, password complexity alignment |
+| `f1f1abb` | `feat: add async password reset queue and email worker support` | BullMQ email queue and worker handling for password reset |
+| `2cb0b8d` | `refactor: improve file service error handling and type safety` | Typed req.user.sub, NotFoundError/ForbiddenError handling |
+| `ece8f1a` | `test: update integration tests and add admin board auth coverage` | Secure DB token resolution in tests, 19 passing unit tests |
+| `f06381a` | `ci: add lint and typecheck stage and clean workflow bom` | Added type check job in CI, removed UTF-8 BOM from deploy.yml |
+| `af1278b` | `docs: add audit report, implementation plan and progress tracker` | Audit report, implementation roadmap, progress tracker |
+
