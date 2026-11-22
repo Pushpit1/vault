@@ -1,19 +1,26 @@
 import { Worker } from "bullmq";
 import { connection } from "../config/bullmq";
 import { emailService } from "../services/email.service";
-import { emailQueue } from "../queues/email.queue";
-const emailWorker = new Worker(
+import { logger } from "../utils/logger/logger";
+import { EmailJob } from "../queues/email.queue";
+
+const emailWorker = new Worker<EmailJob>(
   "email",
 
   async (job) => {
-    console.log("📧 Sending verification email...");
+    const { type, email, token } = job.data;
 
-    await emailService.sendVerificationEmail(
-      job.data.email,
-      job.data.token
-    );
-
-    console.log("✅ Email sent");
+    if (type === "verification-email") {
+      logger.info("Sending verification email", { jobId: job.id, email });
+      await emailService.sendVerificationEmail(email, token);
+      logger.info("Verification email sent", { jobId: job.id, email });
+    } else if (type === "password-reset-email") {
+      logger.info("Sending password reset email", { jobId: job.id, email });
+      await emailService.sendPasswordResetEmail(email, token);
+      logger.info("Password reset email sent", { jobId: job.id, email });
+    } else {
+      logger.warn("Unknown email job type", { jobId: job.id, type });
+    }
   },
 
   {
@@ -22,13 +29,14 @@ const emailWorker = new Worker(
 );
 
 emailWorker.on("completed", (job) => {
-  console.log(`✅ Job ${job.id} completed`);
+  logger.info(`Email job completed`, { jobId: job.id });
 });
 
 emailWorker.on("failed", (job, err) => {
-  console.error(`❌ Job ${job?.id} failed`);
-
-  console.error(err.message);
+  logger.error(`Email job failed`, {
+    jobId: job?.id,
+    error: err.message,
+  });
 });
 
 export default emailWorker;

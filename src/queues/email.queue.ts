@@ -2,11 +2,20 @@ import { Queue } from "bullmq";
 import { connection } from "../config/bullmq";
 
 export interface VerificationEmailJob {
+  type: "verification-email";
   email: string;
   token: string;
 }
 
-export const emailQueue = new Queue<VerificationEmailJob>(
+export interface PasswordResetEmailJob {
+  type: "password-reset-email";
+  email: string;
+  token: string;
+}
+
+export type EmailJob = VerificationEmailJob | PasswordResetEmailJob;
+
+export const emailQueue = new Queue<EmailJob>(
   "email",
   {
     connection,
