@@ -10,6 +10,11 @@ jobs:
   lint-and-typecheck:
     runs-on: ubuntu-latest
 
+    env:
+      # Placeholder PostgreSQL URL required by prisma.config.ts for client generation.
+      # Prisma generate performs code generation only and does not establish a database connection.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vault_ci_dummy
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -78,6 +83,7 @@ jobs:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin123
       MINIO_BUCKET_NAME: vault
+      MINIO_BUCKET: vault
       MINIO_USE_SSL: "false"
       JWT_SECRET: test-secret-key-for-vault-ci-2026-long-enough
       APP_URL: http://localhost:5000

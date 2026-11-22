@@ -2,11 +2,11 @@
 
 **Started:** 2026-11-22  
 **Last Updated:** 2026-11-22  
-**Branch:** `main` (working tree prepared for production upgrade)
+**Branch:** `feature/vault-production-upgrade`
 
 ---
 
-## Status: 🟢 READY FOR COMMIT
+## Status: 🟢 COMMITTED (8 commits on `feature/vault-production-upgrade`)
 
 All blocking regressions, code cleanups, test alignments, and review findings have been resolved.
 
@@ -39,6 +39,7 @@ All blocking regressions, code cleanups, test alignments, and review findings ha
 - [x] **Code Cleanliness:** Removed unused `BUCKET_NAME` import in `src/services/user.service.ts`.
 - [x] **Log Integrity:** Restored original tracked logs and removed empty temporary generated log artifacts from today's execution.
 - [x] **Test Setup Resilience:** Enhanced `tests/setup.ts` to support offline/decoupled unit testing via graceful handling of missing local Redis.
+- [x] **CI Prisma Client Generation:** Configured static dummy `DATABASE_URL` in `lint-and-typecheck` job so `npx prisma generate` runs cleanly without requiring a live database connection or production credentials.
 
 ---
 
@@ -88,4 +89,5 @@ All blocking regressions, code cleanups, test alignments, and review findings ha
 | `ece8f1a` | `test: update integration tests and add admin board auth coverage` | Secure DB token resolution in tests, 19 passing unit tests |
 | `f06381a` | `ci: add lint and typecheck stage and clean workflow bom` | Added type check job in CI, removed UTF-8 BOM from deploy.yml |
 | `af1278b` | `docs: add audit report, implementation plan and progress tracker` | Audit report, implementation roadmap, progress tracker |
+| `c56a9a8` | `docs: record commit hashes and verification record in progress tracker` | Progress tracker update with verified commit history |
 
