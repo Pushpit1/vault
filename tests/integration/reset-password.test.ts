@@ -7,6 +7,7 @@ import {
 } from "vitest";
 
 import app from "../../src/app";
+import { prisma } from "../../src/config/prisma";
 
 import { createTestUser } from "../fixtures/user.factory";
 
@@ -19,7 +20,7 @@ describe("Reset Password", () => {
 
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-await registerUser(testUser);
+    await registerUser(testUser);
 
     const forgotResponse = await request(app)
       .post("/api/v1/users/forgot-password")
@@ -27,8 +28,25 @@ await registerUser(testUser);
         email: testUser.email,
       });
 
-    resetToken =
-      forgotResponse.body.data.resetToken;
+    expect(forgotResponse.status).toBe(200);
+
+    // Retrieve the reset token created in the database for testing
+    const tokenRecord = await prisma.passwordResetToken.findFirst({
+      where: {
+        user: {
+          email: testUser.email,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!tokenRecord) {
+      throw new Error("Password reset token was not created in database");
+    }
+
+    resetToken = tokenRecord.token;
   });
 
   it("should reset password successfully", async () => {

@@ -17,35 +17,38 @@ import { registerUser } from "../helpers/user.helper";
 describe("Forgot Password", () => {
   beforeAll(async () => {
     await cleanupUser(testUser.email);
-await registerUser(testUser);  });
-
-  it("should generate password reset token", async () => {
-    const response = await request(app)
-      .post("/api/v1/users/forgot-password")
-      .send({
-        email: testUser.email,
-      });
-
-    expect(response.status).toBe(200);
-
-    expect(response.body.success)
-      .toBe(true);
-
-    expect(
-      response.body.data.resetToken
-    ).toBeDefined();
+    await registerUser(testUser);
   });
 
-  it("should reject unknown email", async () => {
+  it("should respond with 200 and generic message for known email", async () => {
     const response = await request(app)
       .post("/api/v1/users/forgot-password")
-      .send({
-        email: "unknown@test.com",
-      });
+      .send({ email: testUser.email });
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    // Should NOT expose the raw reset token (security: token is emailed, not returned)
+    expect(response.body.data?.resetToken).toBeUndefined();
+    expect(response.body.data?.message).toBeDefined();
+  });
 
-    expect(response.body.success)
-      .toBe(false);
+  it("should respond with 200 and generic message for unknown email (no user enumeration)", async () => {
+    const response = await request(app)
+      .post("/api/v1/users/forgot-password")
+      .send({ email: "nonexistent@example.com" });
+
+    // Must NOT reveal whether the email exists
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data?.message).toBeDefined();
+  });
+
+  it("should reject invalid email format", async () => {
+    const response = await request(app)
+      .post("/api/v1/users/forgot-password")
+      .send({ email: "not-an-email" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
   });
 });
