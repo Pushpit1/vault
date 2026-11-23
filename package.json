@@ -8,6 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "worker": "node dist/worker.js",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

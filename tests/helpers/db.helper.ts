@@ -11,6 +11,7 @@ export async function cleanupUser(
 }
 
 export async function cleanupAll() {
+  await prisma.file.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.passwordResetToken.deleteMany();
   await prisma.emailVerificationToken.deleteMany();

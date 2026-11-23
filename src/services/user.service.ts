@@ -388,6 +388,16 @@ export const userService = {
       throw new NotFoundError("User not found");
     }
 
+    // Resolve avatar object key to a presigned URL for the client
+    if (user.avatar) {
+      try {
+        const avatarUrl = await storageService.getPresignedUrl(user.avatar, 900);
+        return { ...user, avatarUrl };
+      } catch {
+        // Storage unavailable; return profile without avatar URL
+      }
+    }
+
     return user;
   },
 

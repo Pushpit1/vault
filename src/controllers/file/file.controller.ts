@@ -28,7 +28,7 @@ export const uploadFile = asyncHandler(
 );
 
 export const downloadFile = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next) => {
     const id = req.params.id as string;
 
     const result = await fileService.download(id, req.user.sub!);
@@ -38,6 +38,13 @@ export const downloadFile = asyncHandler(
       "Content-Disposition",
       `attachment; filename="${encodeURIComponent(result.file.originalName)}"`
     );
+    res.setHeader("Content-Length", result.file.size.toString());
+
+    result.stream.on("error", (err) => {
+      if (!res.headersSent) {
+        next(err);
+      }
+    });
 
     result.stream.pipe(res);
   }

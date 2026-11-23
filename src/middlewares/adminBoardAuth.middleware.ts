@@ -41,6 +41,7 @@ export const adminBoardAuth = async (
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
+            maxAge: 15 * 60 * 1000, // 15 minutes — matches access token lifetime
           });
         }
         return next();

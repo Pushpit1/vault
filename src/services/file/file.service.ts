@@ -9,13 +9,15 @@ import { ForbiddenError } from "../../errors/ForbiddenError";
 
 export const fileService = {
   async upload(file: Express.Multer.File, ownerId: string) {
-    const extension = path.extname(file.originalname).toLowerCase();
+    const sanitizedOriginalName =
+      path.basename(file.originalname).replace(/[\r\n\0]/g, "") || "unnamed";
+    const extension = path.extname(sanitizedOriginalName).toLowerCase();
     const objectKey = `files/${ownerId}/${crypto.randomUUID()}${extension}`;
 
     await storageService.upload(objectKey, file.buffer, file.mimetype);
 
     return fileRepository.create({
-      originalName: file.originalname,
+      originalName: sanitizedOriginalName,
       objectKey,
       bucket: BUCKET_NAME,
       mimeType: file.mimetype,

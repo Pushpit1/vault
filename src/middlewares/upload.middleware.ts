@@ -1,5 +1,6 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
+import { BadRequestError } from "../errors/BadRequestError";
 
 const ALLOWED_MIME_TYPES = new Set([
   // Images
@@ -60,7 +61,7 @@ function fileFilter(
   if (ALLOWED_MIME_TYPES.has(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error(`File type '${file.mimetype}' is not allowed`));
+    cb(new BadRequestError(`File type '${file.mimetype}' is not allowed`));
   }
 }
 
@@ -72,7 +73,7 @@ function avatarFilter(
   if (ALLOWED_AVATAR_MIME_TYPES.has(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Avatar must be a JPEG, PNG, GIF, or WebP image"));
+    cb(new BadRequestError("Avatar must be a JPEG, PNG, GIF, or WebP image"));
   }
 }
 
