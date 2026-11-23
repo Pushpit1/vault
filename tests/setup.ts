@@ -2,9 +2,11 @@ import dotenv from "dotenv";
 import { beforeAll, afterAll } from "vitest";
 import redis from "../src/config/redis";
 
+// Load .env.test for local development without overriding CI-injected variables.
+// When running in CI, process.env is already populated by the workflow; override: false
+// (the dotenv default) ensures those values take precedence over .env.test.
 dotenv.config({
   path: ".env.test",
-  override: true,
 });
 
 beforeAll(async () => {
